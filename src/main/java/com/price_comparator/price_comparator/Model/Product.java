@@ -13,7 +13,6 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
     private String productId; // String value for the id
 
     private String name;
@@ -22,7 +21,16 @@ public class Product {
 
     private String brand;
 
-    private Integer packageQuantity;
+    private Double packageQuantity;
 
     private String packageUnit;
+
+    public Product(String productId, String name, String category, String brand, Double packageQuantity, String packageUnit) {
+        this.productId = productId;
+        this.name = name;
+        this.category = category;
+        this.brand = brand;
+        this.packageQuantity = packageQuantity;
+        this.packageUnit = packageUnit;
+    }
 }

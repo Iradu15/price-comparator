@@ -29,4 +29,13 @@ public class ProductPrice {
     private LocalDate startDate;
 
     private LocalDate endDate;
+
+    public ProductPrice(Product product, Store store, String currency, Double price, LocalDate startDate, LocalDate endDate) {
+        this.product = product;
+        this.store = store;
+        this.currency = currency;
+        this.price = price;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 }
