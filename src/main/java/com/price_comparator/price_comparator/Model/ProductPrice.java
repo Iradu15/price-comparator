@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -25,15 +26,7 @@ public class ProductPrice {
 
     private Double price;
 
-    private Date startDate;
+    private LocalDate startDate;
 
-    private Date endDate;
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
+    private LocalDate endDate;
 }

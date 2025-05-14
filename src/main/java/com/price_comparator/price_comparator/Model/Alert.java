@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -20,5 +21,5 @@ public class Alert {
 
     private Double targetPrice;
 
-    private Date createdAt;
+    private LocalDate createdAt;
 }
