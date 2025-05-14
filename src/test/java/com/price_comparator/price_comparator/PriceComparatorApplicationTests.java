@@ -1,4 +1,4 @@
-package com.price_comparator.price_compparator;
+package com.price_comparator.price_comparator;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

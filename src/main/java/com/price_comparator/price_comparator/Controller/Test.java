@@ -1,4 +1,4 @@
-package com.price_comparator.price_compparator.Controllers;
+package com.price_comparator.price_comparator.Controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
