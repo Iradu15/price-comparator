@@ -2,15 +2,21 @@ package com.price_comparator.price_comparator.Model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name="productPrices")
+@Getter
+@Setter
+@Table(
+        uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "store_id", "startDate"}),
+        name="productPrices"
+)
 public class ProductPrice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +35,8 @@ public class ProductPrice {
     private LocalDate startDate;
 
     private LocalDate endDate;
+
+    public ProductPrice(){}
 
     public ProductPrice(Product product, Store store, String currency, Double price, LocalDate startDate, LocalDate endDate) {
         this.product = product;
