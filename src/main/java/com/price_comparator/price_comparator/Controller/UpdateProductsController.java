@@ -13,14 +13,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping("/update")
 public class UpdateProductsController {
 
     @Autowired
     private UpdateProductsService updateService; // Injects the DepartmentService dependency.
 
 
-    @PostMapping("/updateProducts")
+    @PostMapping("update")
     ResponseEntity<String> updateProducts(@RequestParam("file") MultipartFile file){
         String originalFilename = file.getOriginalFilename();
         if (originalFilename == null || !originalFilename.contains("_") || StringUtils.countOccurrencesOf(originalFilename, "-") != 2) {
