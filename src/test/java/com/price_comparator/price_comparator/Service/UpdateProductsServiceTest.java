@@ -59,9 +59,8 @@ public class UpdateProductsServiceTest {
 
     @Test
     void testAddNewProducts(){
-        /*
-        Test adding new products works as expected
-        */
+        // Test adding new products works as expected
+
         List<Product> products = List.of(
                 new Product("P001", "lapte zuzu", "lactate", "Zuzu", 1.0, "l"),
                 new Product("P002", "iaurt grecesc", "lactate", "Lidl", 0.4, "kg")
@@ -77,9 +76,8 @@ public class UpdateProductsServiceTest {
 
     @Test
     void testAddDuplicateProducts(){
-        /*
-        Test adding duplicate products works as intended
-        */
+        // Test adding duplicate products works as intended
+
         List<Product> products = List.of(
                 new Product("P001", "lapte zuzu", "lactate", "Zuzu", 1.0, "l"),
                 new Product("P001", "lapte zuzu", "lactate", "Zuzu", 1.0, "l"),
@@ -118,9 +116,7 @@ public class UpdateProductsServiceTest {
 
     @Test
     void testUpdateProductPrice(){
-        /*
-        Test that updating productPrice mapping works as intended and adds new mapping
-        */
+        // Test that updating productPrice mapping works as intended and adds new mapping
 
         Store store = setUpStoreEntity("Lidl");
         Product product = setUpProduct("P001", "lapte zuzu", "lactate", "Zuzu", 1.0, "l");
@@ -144,8 +140,6 @@ public class UpdateProductsServiceTest {
 
         List<ProductPrice> mappings = productPriceRepository.findAll();
         mappings.sort((o1, o2) -> o1.getStartDate().compareTo(o2.getStartDate()));
-
-        System.out.println("PULA PULA" + mappings.get(0).getEndDate());
 
         // assert that old mapping's endDate was updated to (today - 1 day)
         oldMapping = mappings.get(0);
