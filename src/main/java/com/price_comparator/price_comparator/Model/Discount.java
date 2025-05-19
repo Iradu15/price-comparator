@@ -4,12 +4,12 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="disounts")
+@Table(name="discounts")
 public class Discount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,7 @@ public class Discount {
 
     private int percentageOfDiscount;
 
-    private Date fromDate;
+    private LocalDate fromDate;
 
-    private Date toDate;
+    private LocalDate toDate;
 }
