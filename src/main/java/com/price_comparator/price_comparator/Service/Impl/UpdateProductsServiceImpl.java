@@ -84,8 +84,8 @@ public class UpdateProductsServiceImpl implements UpdateProductsService {
     @Override
     public void updatePrices(ProductPrice oldProductPrice, ProductDto productDto, String storeName, LocalDate date) {
         /*
-        Insert date - 1 as in the oldProductPrice (product-store) mapping and add new one for the same store,
-        with starting date = date
+        Update endDate for old mapping from null to date - 1 day and insert the new mapping with startDate as date and
+        endDate = null
         */
         oldProductPrice.setEndDate(date.minusDays(1));
         productPriceRepository.save(oldProductPrice);

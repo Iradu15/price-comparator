@@ -16,8 +16,7 @@ import java.time.LocalDate;
 public class UpdateProductsController {
 
     @Autowired
-    private UpdateProductsService updateService; // Injects the DepartmentService dependency.
-
+    private UpdateProductsService updateService;
 
     @PostMapping("update")
     ResponseEntity<String> updateProducts(@RequestParam("file") MultipartFile file){
