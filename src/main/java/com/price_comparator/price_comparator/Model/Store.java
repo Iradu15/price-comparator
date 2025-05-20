@@ -21,4 +21,11 @@ public class Store {
     public Store(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "Store{" +
+                "name='" + name + '\'' +
+                '}';
+    }
 }

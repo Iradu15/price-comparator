@@ -44,4 +44,15 @@ public class Discount {
         this.fromDate = fromDate;
         this.toDate = toDate;
     }
+
+    @Override
+    public String toString() {
+        return "Discount{" +
+                "product=" + product +
+                ", store=" + store +
+                ", percentageOfDiscount=" + percentageOfDiscount +
+                ", fromDate=" + fromDate +
+                ", toDate=" + toDate +
+                '}';
+    }
 }

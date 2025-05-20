@@ -15,6 +15,9 @@ public interface DiscountsRepository extends JpaRepository<Discount, Long> {
     @Query("SELECT d FROM Discount d WHERE d.store = :store AND d.product = :product AND d.fromDate <= :currentDate AND d.toDate >= :currentDate")
     Optional<Discount> findActiveDiscount(@Param("store") Store store, @Param("product") Product product, @Param("currentDate") LocalDate currentDate);
 
+    @Query("SELECT d FROM Discount d WHERE d.fromDate <= :currentDate AND d.toDate >= :currentDate ORDER BY d.percentageOfDiscount DESC LIMIT :size")
+    Optional<List<Discount>> findTopActiveDiscounts(@Param("currentDate") LocalDate currentDate, @Param("size") int size);
+
     @Query("SELECT d from Discount d WHERE d.store = :store AND d.product = :product AND d.fromDate = :from_date")
     Optional<List<Discount>> findAllByFromDate(@Param("store") Store store, @Param("product")Product product, @Param("from_date") LocalDate fromDate);
 }

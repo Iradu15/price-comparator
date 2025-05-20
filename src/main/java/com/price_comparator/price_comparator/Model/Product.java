@@ -16,6 +16,7 @@ public class Product {
     @Column(unique=true)
     private String productId; // String value for the id
 
+    @Getter
     private String name;
 
     private String category;
@@ -39,7 +40,16 @@ public class Product {
         this.packageUnit = packageUnit;
     }
 
-    public String getName() {
-        return name;
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productId='" + productId + '\'' +
+                ", name='" + name + '\'' +
+                ", category='" + category + '\'' +
+                ", brand='" + brand + '\'' +
+                ", packageQuantity=" + packageQuantity +
+                ", packageUnit='" + packageUnit + '\'' +
+                '}';
     }
 }
