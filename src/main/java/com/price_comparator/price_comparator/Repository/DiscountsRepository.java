@@ -20,4 +20,22 @@ public interface DiscountsRepository extends JpaRepository<Discount, Long> {
 
     @Query("SELECT d from Discount d WHERE d.store = :store AND d.product = :product AND d.fromDate = :from_date")
     Optional<List<Discount>> findAllByFromDate(@Param("store") Store store, @Param("product")Product product, @Param("from_date") LocalDate fromDate);
+
+    // overlapping means that there are discounts with:
+    // existentDiscountFrom <= toBeInsertedDiscountFrom <= existentDiscountTo or
+    // existentDiscountFrom <= toBeInsertedDiscountTo <= existentDiscountTo or
+    // existentDiscountFrom <= toBeInsertedDiscountFrom && toBeInsertedDiscountTo <= existentDiscountTo
+    @Query("""
+    SELECT d from Discount d
+        WHERE d.store = :store AND d.product = :product
+            AND (
+                (:fromDate BETWEEN d.fromDate AND d.toDate)
+                OR (:toDate BETWEEN d.fromDate AND d.toDate)
+                OR (d.fromDate <= :fromDate AND :toDate <= d.toDate)
+            )
+    """)
+    Optional<List<Discount>> findOverlappingDiscounts(@Param("store") Store store,
+                                                      @Param("product")Product product,
+                                                      @Param("fromDate") LocalDate fromDate,
+                                                      @Param("toDate") LocalDate toDate);
 }

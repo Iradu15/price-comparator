@@ -38,8 +38,8 @@ public class UpdateProductsController {
         String storeName = parts[0];
         LocalDate fileDate = LocalDate.parse(parts[1].replace(".csv", ""));
 
-        if (!isFileDateCurrentDay(fileDate)){
-            return ResponseEntity.badRequest().body("Updates can be applied only if fileDate is current day");
+        if (isFileDatePast(fileDate)){
+            return ResponseEntity.badRequest().body("Past updates cannot be applied");
         }
 
         try {
@@ -65,8 +65,8 @@ public class UpdateProductsController {
         String storeName = parts[0];
         LocalDate fileDate = LocalDate.parse(parts[2].replace(".csv", ""));
 
-        if (!isFileDateCurrentDay(fileDate)){
-            return ResponseEntity.badRequest().body("Discounts can be applied only if fileDate is current day");
+        if (isFileDatePast(fileDate)){
+            return ResponseEntity.badRequest().body("Past discounts cannot be applied");
         }
 
         try {
@@ -77,9 +77,9 @@ public class UpdateProductsController {
         }
     }
 
-    public boolean isFileDateCurrentDay(LocalDate fileDate){
+    public boolean isFileDatePast(LocalDate fileDate){
         CurrentDate currentDate = currentDateRepository.findById(1L)
                 .orElseThrow(() -> new RuntimeException("System state not initialized"));
-        return fileDate.isEqual(currentDate.getCurrentDay());
+        return fileDate.isBefore(currentDate.getCurrentDay());
     }
 }

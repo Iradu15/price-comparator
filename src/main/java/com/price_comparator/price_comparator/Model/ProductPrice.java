@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Setter
 @Table(
         uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "store_id", "startDate"}),
-        name="productPrices"
+        name="product_prices"
 )
 public class ProductPrice {
     @Id
@@ -21,6 +21,7 @@ public class ProductPrice {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "productId")
     private Product product;
 
     @ManyToOne

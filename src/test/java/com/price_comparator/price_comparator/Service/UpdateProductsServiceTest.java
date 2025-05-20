@@ -1,5 +1,7 @@
 package com.price_comparator.price_comparator.Service;
 
+import com.price_comparator.price_comparator.AbstractBaseTest;
+import com.price_comparator.price_comparator.Controller.CurrentDateController;
 import com.price_comparator.price_comparator.DTO.ProductDto;
 import com.price_comparator.price_comparator.Model.Product;
 import com.price_comparator.price_comparator.Model.ProductPrice;
@@ -20,25 +22,11 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//@TestConfiguration
-//static class TestConfig {
-//    @Bean
-//    @Primary
-//    public DataSource dataSource() {
-//        return DataSourceBuilder.create()
-//                .url("jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1")
-//                .username("admin")
-//                .password("root")
-//                .driverClassName("org.h2.Driver")
-//                .build();
-//    }
-//}
-
 
 @SpringBootTest
 @ActiveProfiles("test") // will be configured using application-{test}.properties
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class UpdateProductsServiceTest {
+public class UpdateProductsServiceTest extends AbstractBaseTest {
     @Autowired
     UpdateProductsService updateProductsService;
 
@@ -47,8 +35,12 @@ public class UpdateProductsServiceTest {
 
     @Autowired
     ProductPriceRepository productPriceRepository;
+
     @Autowired
-    private StoreRepository storeRepository;
+    StoreRepository storeRepository;
+
+    @Autowired
+    CurrentDateController currentDateController;
 
     @BeforeEach
     void deleteAll(){
@@ -93,27 +85,6 @@ public class UpdateProductsServiceTest {
         assertTrue(errMessage.contains("could not execute statement"));
     }
 
-    Store setUpStoreEntity(String storeName){
-        Store store = new Store(storeName);
-        storeRepository.save(store);
-        storeRepository.flush();
-        return store;
-    }
-
-    Product setUpProduct(String productId, String name, String category, String brand, Double packageQuantity, String packageUnit){
-        Product product = new Product(productId, name, category, brand, packageQuantity, packageUnit);
-        productRepository.save(product);
-        productRepository.flush();
-        return product;
-    }
-
-    ProductPrice setUpProductPrice(Store store, Product product, String currency, Double price, LocalDate startDate, LocalDate endDate){
-        ProductPrice productPrice = new ProductPrice(product, store, "Ron", 12.9, LocalDate.now().minusDays(2), null);
-        productPriceRepository.save(productPrice);
-        productPriceRepository.flush();
-        return productPrice;
-    }
-
     @Test
     void testUpdateProductPrice(){
         // Test that updating productPrice mapping works as intended and adds new mapping
@@ -146,7 +117,8 @@ public class UpdateProductsServiceTest {
         assertEquals(oldMapping.getEndDate(), LocalDate.now().minusDays(1));
 
         // assert new mapping was inserted
-        ProductPrice newMapping = productPriceRepository.findCurrentPrice(product, store).get();
+        LocalDate currentDate = LocalDate.parse(currentDateController.getCurrentDate());
+        ProductPrice newMapping = productPriceRepository.findCurrentPrice(product, store, currentDate).get();
         assertNull(newMapping.getEndDate());
         assertEquals(newMapping.getStartDate(), LocalDate.now());
     }

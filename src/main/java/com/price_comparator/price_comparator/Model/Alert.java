@@ -16,6 +16,7 @@ public class Alert {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "productId")
     private Product product;
 
     private Double targetPrice;

@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(
-        uniqueConstraints = @UniqueConstraint(columnNames = {"product", "store", "percentageOfDiscount", "fromDate", "toDate"}),
+        uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "store", "percentageOfDiscount", "fromDate", "toDate"}),
         name="discounts"
 )
 @Getter
@@ -23,6 +23,7 @@ public class Discount {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "productId")
     private Product product;
 
     @ManyToOne
