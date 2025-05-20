@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles("test") // will be configured using application-{test}.properties
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UpdateProductsServiceTest {
     @Autowired

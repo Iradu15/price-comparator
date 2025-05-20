@@ -37,16 +37,15 @@ public class UpdateProductsServiceImpl implements UpdateProductsService {
         List<ProductPrice> productPricesToBeAdded = new ArrayList<>();
         List<Product> productsToBeAdded = new ArrayList<>();
 
+        if (storeRepository.findByNameIgnoreCase(storeName).isEmpty()){
+            createStoreIfNotExistent(storeName);
+        }
+
         for(ProductDto productDto: retrievedProducts) {
             // add new products
             if(productRepository.findByProductId(productDto.productId()).isEmpty()){
                 Product product = createProductFromDto(productDto);
                 productsToBeAdded.add(product);
-            }
-
-            // add new stores
-            if (storeRepository.findByNameIgnoreCase(storeName).isEmpty()){
-                createStoreIfNotExistent(storeName);
             }
         }
         productRepository.saveAll(productsToBeAdded);
