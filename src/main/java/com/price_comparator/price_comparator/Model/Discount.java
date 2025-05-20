@@ -1,15 +1,22 @@
 package com.price_comparator.price_comparator.Model;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="discounts")
+@Table(
+        uniqueConstraints = @UniqueConstraint(columnNames = {"product", "store", "percentageOfDiscount", "fromDate", "toDate"}),
+        name="discounts"
+)
+@Getter
 public class Discount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,9 +28,20 @@ public class Discount {
     @ManyToOne
     private Store store;
 
-    private int percentageOfDiscount;
+    @Setter
+    private Integer percentageOfDiscount;
 
+    @Setter
     private LocalDate fromDate;
 
+    @Setter
     private LocalDate toDate;
+
+    public Discount(Product product, Store store, Integer percentageOfDiscount, LocalDate fromDate, LocalDate toDate) {
+        this.product = product;
+        this.store = store;
+        this.percentageOfDiscount = percentageOfDiscount;
+        this.fromDate = fromDate;
+        this.toDate = toDate;
+    }
 }
