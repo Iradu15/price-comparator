@@ -3,12 +3,9 @@ package com.price_comparator.price_comparator.Controller;
 import com.price_comparator.price_comparator.Model.CurrentDate;
 import com.price_comparator.price_comparator.Repository.CurrentDateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
 
 @RestController
 public class CurrentDateController {
