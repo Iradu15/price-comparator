@@ -36,20 +36,10 @@ public class UpdateProductsServiceImpl implements UpdateProductsService {
     @Override
     public void processCsvFile(MultipartFile file, String storeName, LocalDate date) {
         List<ProductDto> retrievedProducts = CSVController.parseProductCSV(file);
-
         List<ProductPrice> productPricesToBeAdded = new ArrayList<>();
-        List<Product> productsToBeAdded = new ArrayList<>();
 
         createStoreIfNotExistent(storeName);
-
-        // add new products
-        for(ProductDto productDto: retrievedProducts)
-            if(productRepository.findByProductId(productDto.productId()).isEmpty()){
-                Product product = createProductFromDto(productDto);
-                productsToBeAdded.add(product);
-            }
-        productRepository.saveAll(productsToBeAdded);
-        System.out.printf("Saved %d new products%n", productsToBeAdded.size());
+        saveNewProducts(retrievedProducts);
 
         for(ProductDto productDto: retrievedProducts) {
             // check was done earlier, it's ok to .get() directly
@@ -71,7 +61,7 @@ public class UpdateProductsServiceImpl implements UpdateProductsService {
             LocalDate currentDate = LocalDate.parse(currentDateController.getCurrentDate());
             if (productPriceRepository.findCurrentPrice(product, store, currentDate).isPresent() && currentDate == date){
                 ProductPrice existentMapping = productPriceRepository.findCurrentPrice(product, store, currentDate).get();
-                updatePrices(existentMapping, productDto, storeName, date);
+                updateOldMapping(existentMapping, productDto, storeName, date);
 
                 System.out.printf("Updated productPrice %s - %s%n", existentMapping.getProduct().getProductId(), existentMapping.getStore().getName());
             }
@@ -87,7 +77,7 @@ public class UpdateProductsServiceImpl implements UpdateProductsService {
 
 
     @Override
-    public void updatePrices(ProductPrice oldMapping, ProductDto productDto, String storeName, LocalDate date) {
+    public void updateOldMapping(ProductPrice oldMapping, ProductDto productDto, String storeName, LocalDate date) {
         /*
         Update endDate for old mapping from null to date - 1 day
         */
@@ -114,6 +104,22 @@ public class UpdateProductsServiceImpl implements UpdateProductsService {
         Product product= productRepository.findByProductId(dtoObject.productId()).get();
 
         return new ProductPrice(product, store, dtoObject.currency(), dtoObject.price(), date, null);
+    }
+
+    public void saveNewProducts(List<ProductDto> retrievedProducts){
+        /*
+        Save new products, necessary before working with productPrices
+        */
+        List<Product> productsToBeAdded = new ArrayList<>();
+
+        for(ProductDto productDto: retrievedProducts)
+            if(productRepository.findByProductId(productDto.productId()).isEmpty()){
+                Product product = createProductFromDto(productDto);
+                productsToBeAdded.add(product);
+            }
+        productRepository.saveAll(productsToBeAdded);
+        System.out.printf("Saved %d new products%n", productsToBeAdded.size());
+
     }
 
 }

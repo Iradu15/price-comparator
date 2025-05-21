@@ -45,4 +45,9 @@ public class ProductPrice {
         this.startDate = startDate;
         this.endDate = endDate;
     }
+
+    @Override
+    public String toString() {
+        return "ProductPrice{" + "product=" + product + ", store=" + store + ", currency='" + currency + '\'' + ", price=" + price + ", startDate=" + startDate + ", endDate=" + endDate + '}';
+    }
 }
