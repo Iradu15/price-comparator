@@ -29,7 +29,7 @@ public class DiscountsController {
             return ResponseEntity.ok().body("Top " + size + " discounts available:\n " + topDiscounts.toString());
 
         } catch (Exception e){
-            return ResponseEntity.internalServerError().body("Error retrieving top " + size + "  discounts available: " + e.getMessage());
+            return ResponseEntity.internalServerError().body("Error retrieving top " + size + " discounts available: " + e.getMessage());
         }
     }
 
