@@ -124,4 +124,32 @@ public class ProductPriceRepositoryTest extends AbstractBaseTest {
 
         assert (overlappingMappings.getFirst().getStartDate().equals(currentDate));
     }
+
+    @Test
+    void testFindAllCurrentProductPricesIgnoresFinishedItems(){
+        LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
+        Store store = setUpStoreEntity("lidl");
+        Product product = setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
+        setUpProductPrice(store, product, "ron", 10.0, currentDate, null);
+        setUpProductPrice(store, product, "ron", 10.0, currentDate.minusDays(3), currentDate.minusDays(2));
+
+        List<ProductPrice> currentProductPrices = productPriceRepository.findAllCurrentProductPrices(currentDate).get();
+
+        assert(currentProductPrices.size() == 1);
+        assert(currentProductPrices.getFirst().getStartDate().equals(currentDate));
+    }
+
+    @Test
+    void testFindAllCurrentProductPricesFutureFinishedItems(){
+        LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
+        Store store = setUpStoreEntity("lidl");
+        Product product = setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
+        setUpProductPrice(store, product, "ron", 10.0, currentDate, null);
+        setUpProductPrice(store, product, "ron", 10.0, currentDate.plusDays(3), null);
+
+        List<ProductPrice> currentProductPrices = productPriceRepository.findAllCurrentProductPrices(currentDate).get();
+
+        assert(currentProductPrices.size() == 1);
+        assert(currentProductPrices.getFirst().getStartDate().equals(currentDate));
+    }
 }
