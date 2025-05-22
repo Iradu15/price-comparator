@@ -136,6 +136,46 @@ public class DiscountsRepositoryTest extends AbstractBaseTest {
         assert(overlaps.isEmpty());
     }
 
+    @Test
+    void testAvailableLastDayDiscountsSelectsItemsFromLastDay(){
+        LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
 
+        Store store = setUpStoreEntity("lidl");
+        Product product = setUpProduct("P103", "zahar", "dulciuri", "cristal", 1.0, "kg");
+        Product product2 = setUpProduct("P102", "apa", "bauturi", "borsec", 2.0, "l");
+        Discount discount1 = setUpDiscount(product, store, 7, currentDate.minusDays(2), currentDate.plusDays(1));
+        Discount discount2 = setUpDiscount(product2, store, 16, currentDate.minusDays(1), currentDate.plusDays(1));
+
+        /*
+        discount1 started 2 days previous to current date, not 1
+         */
+
+        LocalDate yesterDay = currentDate.minusDays(1);
+        List<Discount> lastDiscounts = discountsRepository.findAllAvailableLastDayDiscounts(currentDate, yesterDay).get();
+
+        assert(lastDiscounts.size() == 1);
+        assert(lastDiscounts.getFirst().getPercentageOfDiscount() == 16);
+    }
+
+    @Test
+    void testAvailableLastDayDiscountsSelectAvailableDiscounts(){
+        LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
+
+        Store store = setUpStoreEntity("lidl");
+        Product product = setUpProduct("P103", "zahar", "dulciuri", "cristal", 1.0, "kg");
+        Product product2 = setUpProduct("P102", "apa", "bauturi", "borsec", 2.0, "l");
+        Discount discount1 = setUpDiscount(product, store, 7, currentDate.minusDays(1), currentDate.minusDays(1));
+        Discount discount2 = setUpDiscount(product2, store, 16, currentDate.minusDays(1), currentDate.plusDays(1));
+
+        /*
+        discount1 started 1 day previous to current date, but it's no longer active
+         */
+
+        LocalDate yesterDay = currentDate.minusDays(1);
+        List<Discount> lastDiscounts = discountsRepository.findAllAvailableLastDayDiscounts(currentDate, yesterDay).get();
+
+        assert(lastDiscounts.size() == 1);
+        assert(lastDiscounts.getFirst().getPercentageOfDiscount() == 16);
+    }
 
 }

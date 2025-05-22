@@ -21,6 +21,15 @@ public interface DiscountsRepository extends JpaRepository<Discount, Long> {
     @Query("SELECT d from Discount d WHERE d.store = :store AND d.product = :product AND d.fromDate = :from_date")
     Optional<List<Discount>> findAllByFromDate(@Param("store") Store store, @Param("product")Product product, @Param("from_date") LocalDate fromDate);
 
+    @Query("""
+           SELECT d from Discount d
+           WHERE d.fromDate = :yesterday
+               AND  d.toDate >= :currentDate
+           """)
+    Optional<List<Discount>> findAllAvailableLastDayDiscounts(@Param("currentDate") LocalDate currentDate,
+                                                              @Param("yesterday") LocalDate yesterday);
+
+
     // overlapping means that there are discounts with:
     // existentDiscountFrom <= toBeInsertedDiscountFrom <= existentDiscountTo or (left overlap)
     // existentDiscountFrom <= toBeInsertedDiscountTo <= existentDiscountTo or (right overlap)

@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
-public class TopDiscountsController {
+public class DiscountsController {
     @Autowired
     DiscountsRepository discountsRepository;
 
@@ -29,7 +29,21 @@ public class TopDiscountsController {
             return ResponseEntity.ok().body("Top " + size + " discounts available:\n " + topDiscounts.toString());
 
         } catch (Exception e){
-            return ResponseEntity.internalServerError().body("Error processing file: " + e.getMessage());
+            return ResponseEntity.internalServerError().body("Error retrieving top " + size + " discounts available: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("discounts/latest")
+    ResponseEntity<String> getLatestDiscounts(){
+        System.out.println("Retrieving latest active discounts (from 24 h ago)");
+        try{
+            LocalDate currentDate = LocalDate.parse(currentDateController.getCurrentDate());
+            LocalDate yesterday = currentDate.minusDays(1);
+            List<Discount> latestDiscounts = discountsRepository.findAllAvailableLastDayDiscounts(currentDate,yesterday).orElse(Collections.emptyList());
+            return ResponseEntity.ok("Latest active discounts:\n " + latestDiscounts.toString());
+        }
+        catch (Exception e){
+            return ResponseEntity.internalServerError().body("Error retrieving latest active discounts " + e.getMessage());
         }
     }
 }
