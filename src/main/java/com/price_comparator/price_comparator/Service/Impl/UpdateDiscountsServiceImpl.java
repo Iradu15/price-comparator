@@ -1,6 +1,7 @@
 package com.price_comparator.price_comparator.Service.Impl;
 
 import com.price_comparator.price_comparator.Controller.CSVController;
+import com.price_comparator.price_comparator.Controller.CurrentDateController;
 import com.price_comparator.price_comparator.DTO.DiscountDto;
 import com.price_comparator.price_comparator.Model.Discount;
 import com.price_comparator.price_comparator.Model.Product;
@@ -34,6 +35,9 @@ public class UpdateDiscountsServiceImpl implements UpdateDiscountsService {
     @Autowired
     StoreRepository storeRepository;
 
+    @Autowired
+    CurrentDateController currentDateController;
+
     @Override
     public void processCsvFile(MultipartFile file, String storeName, LocalDate date) {
         List<DiscountDto> retrievedDiscounts = CSVController.parseDiscountCSV(file);
@@ -43,6 +47,15 @@ public class UpdateDiscountsServiceImpl implements UpdateDiscountsService {
                 .orElseThrow(() -> new IllegalArgumentException("Store with name " + storeName + " not found"));
 
         for(DiscountDto discountDto: retrievedDiscounts) {
+
+            LocalDate currentDate = LocalDate.parse(currentDateController.getCurrentDate());
+            if(discountDto.fromDate().isBefore(currentDate)){
+                System.out.printf(
+                        "Discount for %s - %s within %s - %s cannot be applied, it starts before current day%n",
+                        discountDto.productId(), discountDto.productName(), discountDto.fromDate(), discountDto.toDate()
+                );
+                continue;
+            }
 
             Product product = productRepository.findByProductId(discountDto.productId()).orElseThrow(
                     () -> new IllegalArgumentException(
@@ -57,8 +70,9 @@ public class UpdateDiscountsServiceImpl implements UpdateDiscountsService {
 
 
             if(discountsRepository.findOverlappingDiscounts(store, product, discount.getFromDate(),
-                    discount.getToDate()).isPresent()){
-                System.out.printf("Discount for %s - %s within %s - %s cannot be applied, overlapping mappings found"
+                    discount.getToDate()).filter(list -> !list.isEmpty())
+                    .isPresent()){
+                System.out.printf("Discount for %s - %s within %s - %s cannot be applied, overlapping mappings found%n"
                         , discount.getStore().getName(), discount.getProduct().getProductId(), discount.getFromDate()
                         , discount.getToDate());
 
