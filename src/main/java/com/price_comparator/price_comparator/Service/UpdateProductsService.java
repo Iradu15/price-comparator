@@ -11,7 +11,7 @@ public interface UpdateProductsService {
     void processCsvFile(MultipartFile file, String storeName, LocalDate date) throws IOException;
 
     //    Update existent productPrices
-    void updatePrices(ProductPrice oldProductPrice, ProductDto productDto, String storeName, LocalDate date);
+    void updateOldMapping(ProductPrice oldProductPrice, ProductDto productDto, String storeName, LocalDate date);
 }
 
 

@@ -32,14 +32,14 @@ public class UpdateProductsControllerUtilityFunctionsTest {
     }
 
     @Test
-    void testIsFileDateCurrentDateTrue(){
+    void testIsFilePastTrue(){
         LocalDate fileDate = LocalDate.now().minusDays(1);
-        assert(!updateProductsController.isFileDateCurrentDay(fileDate));
+        assert(updateProductsController.isFileDatePast(fileDate));
     }
 
     @Test
-    void testIsFileDateCurrentDateFalse(){
-        LocalDate fileDate = LocalDate.now();
-        assert(updateProductsController.isFileDateCurrentDay(fileDate));
+    void testIsFileDatePastFalse(){
+        LocalDate fileDate = LocalDate.now().plusDays(1);
+        assert(!updateProductsController.isFileDatePast(fileDate));
     }
 }

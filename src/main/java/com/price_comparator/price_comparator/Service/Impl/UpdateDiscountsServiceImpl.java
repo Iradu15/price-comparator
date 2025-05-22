@@ -39,19 +39,32 @@ public class UpdateDiscountsServiceImpl implements UpdateDiscountsService {
         List<DiscountDto> retrievedDiscounts = CSVController.parseDiscountCSV(file);
         List<Discount> discountsToBeAdded = new ArrayList<>();
 
-         storeRepository.findByNameIgnoreCase(storeName)
+         Store store = storeRepository.findByNameIgnoreCase(storeName)
                 .orElseThrow(() -> new IllegalArgumentException("Store with name " + storeName + " not found"));
 
         for(DiscountDto discountDto: retrievedDiscounts) {
 
-            productRepository.findByProductId(discountDto.productId()).orElseThrow(() -> new IllegalArgumentException
-                    ("Product with ID" + discountDto.productId() + " not found, cannot apply discount\""));
+            Product product = productRepository.findByProductId(discountDto.productId()).orElseThrow(
+                    () -> new IllegalArgumentException(
+                            "Product with ID" + discountDto.productId() + " not found, cannot apply discount\"")
+            );
 
             productPriceRepository.findByProduct_ProductIdAndStore_Name(discountDto.productId(), storeName)
                     .orElseThrow(() -> new IllegalStateException("Mapping between product ID " + discountDto.productId()
                             + " and store " + storeName + " not found"));
 
             Discount discount = createDiscountFromDto(discountDto, storeName);
+
+
+            if(discountsRepository.findOverlappingDiscounts(store, product, discount.getFromDate(),
+                    discount.getToDate()).isPresent()){
+                System.out.printf("Discount for %s - %s within %s - %s cannot be applied, overlapping mappings found"
+                        , discount.getStore().getName(), discount.getProduct().getProductId(), discount.getFromDate()
+                        , discount.getToDate());
+
+                continue;
+            }
+
             discountsToBeAdded.add(discount);
         }
 
