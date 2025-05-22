@@ -2,7 +2,6 @@ package com.price_comparator.price_comparator.Service.Impl;
 
 import com.price_comparator.price_comparator.Controller.CurrentDateController;
 import com.price_comparator.price_comparator.Enum.AllMeasureUnits;
-import com.price_comparator.price_comparator.Enum.StandardUnits;
 import com.price_comparator.price_comparator.DTO.FinalPrice;
 import com.price_comparator.price_comparator.Model.ProductPrice;
 import com.price_comparator.price_comparator.Repository.ProductPriceRepository;
@@ -14,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.Math.min;
 
 @Service
 public class BestPricePerUnitServiceImpl implements BestPricePerUnitService {
@@ -30,7 +31,8 @@ public class BestPricePerUnitServiceImpl implements BestPricePerUnitService {
     @Override
     public List<FinalPrice> getBestProductsPerUnit(int size) {
         LocalDate currentDate = LocalDate.parse(currentDateController.getCurrentDate());
-        List<ProductPrice> productPriceList = productPriceRepository.findAllCurrentProductPrices(currentDate).orElseThrow(() ->
+        List<ProductPrice> productPriceList =
+                productPriceRepository.findAllCurrentProductPrices(currentDate).filter(list -> !list.isEmpty()).orElseThrow(() ->
                 new RuntimeException("No ProductPrices available for the moment, add some first"));
 
         List<FinalPrice> bestProductsPerUnit = new ArrayList<>();
@@ -46,14 +48,14 @@ public class BestPricePerUnitServiceImpl implements BestPricePerUnitService {
         }
 
         bestProductsPerUnit.sort((a, b) -> a.getPricePerUnit().compareTo(b.getPricePerUnit()));
-        return bestProductsPerUnit.subList(0, size);
+        return bestProductsPerUnit.subList(0, min(size, bestProductsPerUnit.size()));
     }
 
     @Override
     public FinalPrice standardizePrice(FinalPrice price) {
         String unit = price.getPackageUnit();
 
-        if(isStandardUnit(unit)){
+        if(BestPricePerUnitService.isStandardUnit(unit)){
             Double pricePerUnit = price.getFinalPrice() / (Double) price.getPackageQuantity();
             price.setPricePerUnit(pricePerUnit);
 
@@ -68,18 +70,5 @@ public class BestPricePerUnitServiceImpl implements BestPricePerUnitService {
         }
 
         return price;
-    }
-
-    static boolean isStandardUnit(String unit) {
-        /*
-        Check if unit measure is already standard
-        */
-        for (StandardUnits s : StandardUnits.values()) {
-            if (s.name().equals(unit)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

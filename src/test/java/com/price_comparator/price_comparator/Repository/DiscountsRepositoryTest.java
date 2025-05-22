@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 
 @SpringBootTest
@@ -22,7 +23,7 @@ public class DiscountsRepositoryTest extends AbstractBaseTest {
         /*
         Test findTopDiscounts size works as expected
         */
-        LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
+        LocalDate currentDate = LocalDate.now();
         Store store = setUpStoreEntity("lidl");
         Product product = setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
         setUpProductPrice(store, product, "ron", 10.0, currentDate.minusDays(1), null);
@@ -44,7 +45,7 @@ public class DiscountsRepositoryTest extends AbstractBaseTest {
         /*
         Test findTopDiscounts only selects active discounts
         */
-        LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
+        LocalDate currentDate = LocalDate.now();
         Store store = setUpStoreEntity("lidl");
         Product product = setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
         setUpProductPrice(store, product, "ron", 10.0, currentDate.minusDays(1), null);
@@ -138,7 +139,7 @@ public class DiscountsRepositoryTest extends AbstractBaseTest {
 
     @Test
     void testAvailableLastDayDiscountsSelectsItemsFromLastDay(){
-        LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
+        LocalDate currentDate = LocalDate.now();
 
         Store store = setUpStoreEntity("lidl");
         Product product = setUpProduct("P103", "zahar", "dulciuri", "cristal", 1.0, "kg");
@@ -159,7 +160,7 @@ public class DiscountsRepositoryTest extends AbstractBaseTest {
 
     @Test
     void testAvailableLastDayDiscountsSelectAvailableDiscounts(){
-        LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
+        LocalDate currentDate = LocalDate.now();
 
         Store store = setUpStoreEntity("lidl");
         Product product = setUpProduct("P103", "zahar", "dulciuri", "cristal", 1.0, "kg");
@@ -169,7 +170,7 @@ public class DiscountsRepositoryTest extends AbstractBaseTest {
 
         /*
         discount1 started 1 day previous to current date, but it's no longer active
-         */
+        */
 
         LocalDate yesterDay = currentDate.minusDays(1);
         List<Discount> lastDiscounts = discountsRepository.findAllAvailableLastDayDiscounts(currentDate, yesterDay).get();
@@ -178,4 +179,36 @@ public class DiscountsRepositoryTest extends AbstractBaseTest {
         assert(lastDiscounts.getFirst().getPercentageOfDiscount() == 16);
     }
 
+    @Test
+    void testFindActiveDiscountReturnsActiveDiscount() {
+        LocalDate currentDate = LocalDate.now();
+
+        Store store = setUpStoreEntity("lidl");
+        Product product = setUpProduct("P101", "lapte", "lactate", "napolact", 4.5, "l");
+        Discount activeDiscount = setUpDiscount(product, store, 10, currentDate.minusDays(2), currentDate.plusDays(2));
+
+        Discount result = discountsRepository.findActiveDiscount(store, product, currentDate).get();
+
+        assert(result.getPercentageOfDiscount() == 10);
+    }
+
+    @Test
+    void testFindActiveDiscountReturnsEmptyWhenDiscountIsExpired() {
+        LocalDate currentDate = LocalDate.now();
+        Store store = setUpStoreEntity("lidl");
+        Product product = setUpProduct("P105", "suc", "bauturi", "prigat", 3.0, "l");
+        setUpDiscount(product, store, 5, currentDate.minusDays(5), currentDate.minusDays(1));
+
+        assert(discountsRepository.findActiveDiscount(store, product, currentDate).isEmpty());
+    }
+
+    @Test
+    void testFindActiveDiscountReturnsEmptyWhenDiscountNotStartedYet() {
+        LocalDate currentDate = LocalDate.now();
+        Store store = setUpStoreEntity("mega image");
+        Product product = setUpProduct("P106", "faina", "panificatie", "baneasa", 2.5, "kg");
+        setUpDiscount(product, store, 7, currentDate.plusDays(1), currentDate.plusDays(5));
+
+        assert(discountsRepository.findActiveDiscount(store, product, currentDate).isEmpty());
+    }
 }

@@ -53,7 +53,7 @@ public class GetFinalPriceServiceImpl implements GetFinalPriceService {
                 .map(Discount::getPercentageOfDiscount)
                 .orElse(0);
 
-        Double finalPrice = currentMapping.getPrice() - percentageOfDiscount / 100 * currentMapping.getPrice();
+        Double finalPrice = currentMapping.getPrice() - (percentageOfDiscount / 100.0) * currentMapping.getPrice();
 
         return new FinalPrice(
                 productId,
