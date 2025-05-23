@@ -23,7 +23,7 @@ public class BestPricePerUnitController {
             List<FinalPrice> bestPricePerUnit = bestPricePerUnitService.getBestProductsPerUnit(size);
             return ResponseEntity.ok("Best " + size + " products by unit / price are: \n" + bestPricePerUnit.toString());
         }catch (Exception e){
-            return ResponseEntity.internalServerError().body("Error while retrieving besst products by unit / price: " + e.getMessage());
+            return ResponseEntity.internalServerError().body("Error while retrieving best products by unit / price: " + e.getMessage());
         }
     }
 }
