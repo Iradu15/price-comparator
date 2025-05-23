@@ -1,5 +1,6 @@
 package com.price_comparator.price_comparator;
 
+import com.price_comparator.price_comparator.Controller.CurrentDateController;
 import com.price_comparator.price_comparator.Model.*;
 import com.price_comparator.price_comparator.Repository.*;
 import com.price_comparator.price_comparator.Service.UpdateProductsService;
@@ -31,6 +32,9 @@ public abstract class AbstractBaseTest {
 
     @Autowired
     public CurrentDateRepository currentDateRepository;
+
+    @Autowired
+    public CurrentDateController currentDateController;
 
     @Autowired
     public DiscountsRepository discountsRepository;

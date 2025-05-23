@@ -49,5 +49,14 @@ public interface ProductPriceRepository extends JpaRepository<ProductPrice, Long
             @Param("store") Store store,
             @Param("startDate") LocalDate startDate
     );
+
+    @Query(
+        """
+        SELECT p FROM ProductPrice p
+        WHERE p.endDate IS NULL
+            AND p.startDate <= :currentDate
+        """
+    )
+    Optional<List<ProductPrice>> findAllCurrentProductPrices(@Param("currentDate") LocalDate currentDate);
 }
 
