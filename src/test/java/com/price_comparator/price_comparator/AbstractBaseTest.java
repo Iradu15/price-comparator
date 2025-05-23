@@ -3,6 +3,7 @@ package com.price_comparator.price_comparator;
 import com.price_comparator.price_comparator.Controller.CurrentDateController;
 import com.price_comparator.price_comparator.Model.*;
 import com.price_comparator.price_comparator.Repository.*;
+import com.price_comparator.price_comparator.Service.AlertsService;
 import com.price_comparator.price_comparator.Service.UpdateProductsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;
@@ -39,8 +40,12 @@ public abstract class AbstractBaseTest {
     @Autowired
     public DiscountsRepository discountsRepository;
 
+    @Autowired
+    public AlertsRepository alertsRepository;
+
     @BeforeEach
     void deleteAll() {
+        alertsRepository.deleteAll();
         discountsRepository.deleteAll();
         currentDateRepository.deleteAll();
         productPriceRepository.deleteAll();
@@ -82,5 +87,12 @@ public abstract class AbstractBaseTest {
         discountsRepository.save(discount);
         discountsRepository.flush();
         return discount;
+    }
+
+    public Alert setUpAlert(Product product, Double targetPrice){
+        Alert alert = new Alert(product, targetPrice, LocalDate.now());
+        alertsRepository.save(alert);
+        alertsRepository.flush();
+        return alert;
     }
 }

@@ -152,4 +152,50 @@ public class ProductPriceRepositoryTest extends AbstractBaseTest {
         assert(currentProductPrices.size() == 1);
         assert(currentProductPrices.getFirst().getStartDate().equals(currentDate));
     }
+
+    @Test
+    void testFindStoresHavingProductSuccess(){
+        LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
+        Store store = setUpStoreEntity("lidl");
+        Store store2 = setUpStoreEntity("kaufland");
+        Product product = setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
+        setUpProductPrice(store, product, "ron", 9.0, currentDate, null);
+        setUpProductPrice(store2, product, "ron", 10.0, currentDate.minusDays(1), null);
+
+        List<Store> stores = productPriceRepository.findStoresHavingProduct(product, currentDate).get();
+
+        assert (stores.size() == 2);
+        assert (stores.getFirst().getName().equals("lidl"));
+        assert (stores.getLast().getName().equals("kaufland"));
+    }
+
+    @Test
+    void testFindStoresHavingProductIgnoreOutdatedMappings(){
+        LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
+        Store store = setUpStoreEntity("lidl");
+        Store store2 = setUpStoreEntity("kaufland");
+        Product product = setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
+        setUpProductPrice(store, product, "ron", 9.0, currentDate, null);
+        setUpProductPrice(store2, product, "ron", 10.0, currentDate.minusDays(2), currentDate.minusDays(1));
+
+        List<Store> stores = productPriceRepository.findStoresHavingProduct(product, currentDate).get();
+
+        assert (stores.size() == 1);
+        assert (stores.getFirst().getName().equals("lidl"));
+    }
+
+    @Test
+    void testFindStoresHavingProductIgnoreFutureMappings(){
+        LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
+        Store store = setUpStoreEntity("lidl");
+        Store store2 = setUpStoreEntity("kaufland");
+        Product product = setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
+        setUpProductPrice(store, product, "ron", 9.0, currentDate, null);
+        setUpProductPrice(store2, product, "ron", 10.0, currentDate.plusDays(1), currentDate.plusDays(2));
+
+        List<Store> stores = productPriceRepository.findStoresHavingProduct(product, currentDate).get();
+
+        assert (stores.size() == 1);
+        assert (stores.getFirst().getName().equals("lidl"));
+    }
 }
