@@ -2,12 +2,14 @@ package com.price_comparator.price_comparator.Controller;
 
 import com.price_comparator.price_comparator.DTO.ShoppingListItemDto;
 import com.price_comparator.price_comparator.DTO.ShoppingListRequestDto;
+import com.price_comparator.price_comparator.DTO.ShoppingListResponseDto;
 import com.price_comparator.price_comparator.Model.Product;
 import com.price_comparator.price_comparator.Model.ShoppingList;
 import com.price_comparator.price_comparator.Model.ShoppingListItem;
 import com.price_comparator.price_comparator.Repository.ProductRepository;
 import com.price_comparator.price_comparator.Repository.ShoppingListItemRepository;
 import com.price_comparator.price_comparator.Repository.ShoppingListRepository;
+import com.price_comparator.price_comparator.Service.ShoppingListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +27,9 @@ public class ShoppingListController {
     @Autowired
     ShoppingListRepository shoppingListRepository;
 
+
     @Autowired
-    ShoppingListItemRepository shoppingListItemRepository;
+    ShoppingListService shoppingListService;
 
     @PostMapping("createShoppingList")
     public ResponseEntity<String> createShoppingList(@RequestBody ShoppingListRequestDto shoppingListRequestDto) {
@@ -102,4 +105,27 @@ public class ShoppingListController {
                 .orElseGet(() -> ResponseEntity.badRequest().body("Shopping list with id " + id + " does not exist"));
     }
 
+    @GetMapping("processShoppingList/{id}")
+    public ResponseEntity<String> processShoppingList(@PathVariable String id){
+        long shoppingListId;
+
+        try {
+            shoppingListId = Long.parseLong(id);
+        } catch (NumberFormatException e) {
+            return ResponseEntity.badRequest().body("Invalid ID format: " + id);
+        }
+
+        Optional<ShoppingList> shoppingList = shoppingListRepository.findById(shoppingListId);
+        if(shoppingList.isEmpty())
+            return ResponseEntity.badRequest().body("Shopping list with id " + id + " does not exist");
+
+
+        try{
+            ShoppingListResponseDto response = shoppingListService.processShoppingList(shoppingList.get());
+            return ResponseEntity.ok("Shopping List management:\n" + response.toString());
+        } catch (Exception e){
+            return ResponseEntity.internalServerError().body("Error while processing shopping list: " + e.getMessage() +
+                    "\n");
+        }
+    }
 }
