@@ -98,8 +98,8 @@ public class AlertsController {
     public ResponseEntity<String> checkAlerts(){
         try{
             System.out.println("Checking alerts status");
-            alertsService.checkAlerts();
-            return ResponseEntity.ok("Check finished");
+            String log = alertsService.checkAlerts();
+            return ResponseEntity.ok(log);
         } catch (Exception e){
             return ResponseEntity.internalServerError().body("Error while checking alerts status " + e.getMessage());
         }

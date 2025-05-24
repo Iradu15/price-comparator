@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDate;
 
 @Entity
-@NoArgsConstructor // Generates a no-args constructor.
-@AllArgsConstructor // Generates a constructor with all arguments.
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name="alerts")
 @Getter
 public class Alert {
@@ -35,6 +35,10 @@ public class Alert {
 
     @Override
     public String toString() {
-        return "Alert{" + "id=" + id + ", product=" + product + ", targetPrice=" + targetPrice + ", createdAt=" + createdAt + "}\n";
+        return "Alert{" + "id=" + id + ", product=" + product + ", targetPrice=" + targetPrice + "}\n";
+    }
+
+    public String shortLog(){
+        return "Product " + product.getProductId() + " at " + targetPrice + "\n";
     }
 }
