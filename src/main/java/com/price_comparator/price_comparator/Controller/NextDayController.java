@@ -2,6 +2,7 @@ package com.price_comparator.price_comparator.Controller;
 
 import com.price_comparator.price_comparator.Model.CurrentDate;
 import com.price_comparator.price_comparator.Repository.CurrentDateRepository;
+import com.price_comparator.price_comparator.Service.AlertsService;
 import com.price_comparator.price_comparator.Service.NextDayUpdateProductPricesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,9 @@ public class NextDayController {
     @Autowired
     NextDayUpdateProductPricesService nextDayUpdateProductPricesService;
 
+    @Autowired
+    AlertsService alertsService;
+
     @GetMapping("/next-day")
     public void goToNextDay(){
         CurrentDate currentDate = currentDateRepository.findById(1L)
@@ -26,6 +30,12 @@ public class NextDayController {
             nextDayUpdateProductPricesService.updateProductPrice();
         } catch (Exception e){
             System.out.printf("Error while updating outdated productPrices: %s", e.getMessage());
+        }
+
+        try {
+            alertsService.checkAlerts();
+        } catch (Exception e){
+            System.out.printf("Error while checking alerts status: %s", e.getMessage());
         }
     }
 }

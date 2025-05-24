@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +29,19 @@ public interface ProductPriceRepository extends JpaRepository<ProductPrice, Long
                                             @Param("currentDate") LocalDate currentDate
     );
 
+    @Query(
+        """
+        SELECT p.store FROM ProductPrice p
+        WHERE p.product = :product
+          AND p.endDate IS NULL
+          AND p.startDate <= :currentDate
+        ORDER BY p.price
+        """
+    )
+    Optional<List<Store>> findStoresHavingProduct(
+            @Param("product") Product product,
+            @Param("currentDate") LocalDate currentDate
+    );
 
     @Query(nativeQuery = true, value = """
     SELECT p.* FROM product_prices p
@@ -39,8 +53,6 @@ public interface ProductPriceRepository extends JpaRepository<ProductPrice, Long
       AND pp.start_date = :currentDate
     """)
     Optional<List<ProductPrice>> findAllCurrentPricesThatNeedToBeReplaced(@Param("currentDate") LocalDate currentDate);
-
-
 
     // overlapping means there are multiple updates planned for the same day
     @Query("SELECT p FROM ProductPrice p WHERE p.product = :product AND p.store = :store and p.startDate = :startDate")
