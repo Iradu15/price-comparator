@@ -36,7 +36,6 @@ public class AlertsServiceImpl implements AlertsService {
     public String checkAlerts() {
         List<Alert> alertList = alertsRepository.findAll();
         List<AlertResponseDto> processedAlerts = new ArrayList<>();
-
         LocalDate currentDate = LocalDate.parse(currentDateController.getCurrentDate());
 
         for (Alert alert: alertList){
@@ -55,8 +54,10 @@ public class AlertsServiceImpl implements AlertsService {
             for (Store store: storesHavingProduct.get()) {
 
                 try {
-                    Double price = getFinalPriceService.getFinalPriceForProduct(product.getProductId(),
-                            store.getName()).getFinalPrice();
+                    Double price = getFinalPriceService.getFinalPriceForProduct(
+                            product.getProductId(),
+                            store.getName()
+                    ).getFinalPrice();
 
                     if(price <= targetPrice){
                         System.out.printf("Price for %s is finally below %f: %f%n", product.getProductId(), targetPrice, price);
@@ -64,12 +65,13 @@ public class AlertsServiceImpl implements AlertsService {
                         processedAlerts.add(alertResponseDto);
                         alertsRepository.delete(alert);
                     }
+
                 } catch (Exception e){
                     System.out.printf(
                             "Error retrieving price for %s within %s: %s%n",
                             product.getProductId(),
-                            store.getName()
-                            , e.getMessage()
+                            store.getName(),
+                            e.getMessage()
                     );
                 }
             }
