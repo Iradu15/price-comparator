@@ -1,7 +1,6 @@
 package com.price_comparator.price_comparator.Service.Impl;
 
 import com.price_comparator.price_comparator.Controller.CurrentDateController;
-import com.price_comparator.price_comparator.DTO.AlertResponseDto;
 import com.price_comparator.price_comparator.DTO.FinalPrice;
 import com.price_comparator.price_comparator.Model.Discount;
 import com.price_comparator.price_comparator.Model.Product;
@@ -12,7 +11,6 @@ import com.price_comparator.price_comparator.Repository.ProductPriceRepository;
 import com.price_comparator.price_comparator.Repository.ProductRepository;
 import com.price_comparator.price_comparator.Repository.StoreRepository;
 import com.price_comparator.price_comparator.Service.GetFinalPriceService;
-import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -76,7 +74,6 @@ public class GetFinalPriceServiceImpl implements GetFinalPriceService {
     public FinalPrice getFinalPriceForProductAllStores(String productId) {
 
         LocalDate currentDate = LocalDate.parse(currentDateController.getCurrentDate());
-
         Product product = productRepository.findByProductId(productId).orElseThrow(
                 () -> new IllegalArgumentException("Product with " + productId + " does not exist")
         );

@@ -3,7 +3,6 @@ package com.price_comparator.price_comparator.Service.Impl;
 import com.price_comparator.price_comparator.DTO.FinalPrice;
 import com.price_comparator.price_comparator.DTO.ShoppingListItemDto;
 import com.price_comparator.price_comparator.DTO.ShoppingListResponseDto;
-import com.price_comparator.price_comparator.Model.Product;
 import com.price_comparator.price_comparator.Model.ShoppingList;
 import com.price_comparator.price_comparator.Model.ShoppingListItem;
 import com.price_comparator.price_comparator.Service.GetFinalPriceService;
@@ -23,12 +22,12 @@ public class ShoppingListServiceImpl implements ShoppingListService {
     @Override
     public ShoppingListResponseDto processShoppingList(ShoppingList shoppingList) {
         List<ShoppingListItem> items = shoppingList.getShoppingListItems();
-        double totalPrice = 0.0;
         List<ShoppingListItemDto> itemResponses = new ArrayList<>();
+        double totalPrice = 0.0;
 
         for (ShoppingListItem item : items){
             String productID = item.getProduct().getProductId();
-            FinalPrice price = null;
+            FinalPrice price;
 
             try {
                 price = getFinalPriceService.getFinalPriceForProductAllStores(productID);
@@ -42,8 +41,12 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 
             totalPrice += priceOfAllUnits;
 
-            ShoppingListItemDto itemResponse = new ShoppingListItemDto(productID, item.getQuantity(), priceOfAllUnits
-                    , price.getStoreName());
+            ShoppingListItemDto itemResponse = new ShoppingListItemDto(
+                    productID,
+                    item.getQuantity(),
+                    priceOfAllUnits,
+                    price.getStoreName()
+            );
             itemResponses.add(itemResponse);
         }
 
