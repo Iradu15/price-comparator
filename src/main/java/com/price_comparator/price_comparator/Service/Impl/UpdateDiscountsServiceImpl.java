@@ -1,6 +1,5 @@
 package com.price_comparator.price_comparator.Service.Impl;
 
-import com.price_comparator.price_comparator.Controller.CSVController;
 import com.price_comparator.price_comparator.Controller.CurrentDateController;
 import com.price_comparator.price_comparator.DTO.DiscountDto;
 import com.price_comparator.price_comparator.Model.Discount;
@@ -10,6 +9,7 @@ import com.price_comparator.price_comparator.Repository.DiscountsRepository;
 import com.price_comparator.price_comparator.Repository.ProductPriceRepository;
 import com.price_comparator.price_comparator.Repository.ProductRepository;
 import com.price_comparator.price_comparator.Repository.StoreRepository;
+import com.price_comparator.price_comparator.Service.CsvService;
 import com.price_comparator.price_comparator.Service.UpdateDiscountsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,9 +38,12 @@ public class UpdateDiscountsServiceImpl implements UpdateDiscountsService {
     @Autowired
     CurrentDateController currentDateController;
 
+    @Autowired
+    CsvService csvService;
+
     @Override
     public void processCsvFile(MultipartFile file, String storeName, LocalDate date) {
-        List<DiscountDto> retrievedDiscounts = CSVController.parseDiscountCSV(file);
+        List<DiscountDto> retrievedDiscounts = csvService.parseDiscountCSV(file);
         List<Discount> discountsToBeAdded = new ArrayList<>();
 
         Store store = storeRepository.findByNameIgnoreCase(storeName).orElseThrow(() -> new IllegalArgumentException(

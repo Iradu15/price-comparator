@@ -1,7 +1,9 @@
-package com.price_comparator.price_comparator.Controller;
+package com.price_comparator.price_comparator.Service.Impl;
 
 import com.price_comparator.price_comparator.DTO.DiscountDto;
 import com.price_comparator.price_comparator.DTO.ProductDto;
+import com.price_comparator.price_comparator.Service.CsvService;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
@@ -10,8 +12,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CSVController {
-    public static List<ProductDto> parseProductCSV(MultipartFile file) {
+@Service
+public class CsvServiceImpl implements CsvService {
+    public List<ProductDto> parseProductCSV(MultipartFile file) {
         /*
         Parse CSV file with products from a specific store
         */
@@ -43,7 +46,7 @@ public class CSVController {
         return retrievedProductDtos;
     }
 
-    public static List<DiscountDto> parseDiscountCSV(MultipartFile file) {
+    public List<DiscountDto> parseDiscountCSV(MultipartFile file) {
         /*
         Parse CSV file with discounts from a specific store
         */
