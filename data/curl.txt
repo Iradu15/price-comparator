@@ -1,0 +1,74 @@
+
+### Date Utilities
+
+# 1. Get Current Date
+curl -X GET http://localhost:8080/get-date
+
+# 2. Get Next Day
+curl -X GET http://localhost:8080/nextDay
+
+### Update Endpoints
+
+# 3. Update Products
+curl -X POST http://localhost:8080/update \
+  -F "file=@{path_to_project}/data/{csv_file_name}.csv"
+
+# 4. Update Discounts
+curl -X POST http://localhost:8080/update/discounts \
+  -F "file=@{path_to_project}/data/{csv_file_name}.csv"
+
+### Discounts
+
+# 5. Top Discounts
+curl -X GET http://localhost:8080/top-discounts
+
+# 6. Discounts in Last 24h
+curl -X GET http://localhost:8080/discounts/latest
+
+### 📊 Best Price Per Unit
+
+# 7. Best Price Per Unit
+curl -X GET "http://localhost:8080/bestPricePerUnit?size=20"
+
+### Alerts
+
+# 8. Create Alert
+curl -X POST http://localhost:8080/createAlert \
+  -H "Content-Type: application/json" \
+  -d '{
+        "productId": "P001",
+        "targetPrice": 20.1
+      }'
+
+# 9. List Alerts
+curl -X GET http://localhost:8080/alerts
+
+# 10. Delete Alert (ID = 1)
+curl -X DELETE http://localhost:8080/deleteAlert/1
+
+# 11. Get Alert by ID
+curl -X GET http://localhost:8080/alert/1
+
+# 12. Check Alerts (endpoint assumed)
+curl -X GET http://localhost:8080/check-alerts
+
+### Shopping List
+
+# 13. Create Shopping List
+curl -X POST http://localhost:8080/createShoppingList \
+  -H "Content-Type: application/json" \
+  -d '{
+        "items": [
+          { "productId": "P001", "quantity": 1 },
+          { "productId": "P011", "quantity": 2 }
+        ]
+      }'
+
+# 14. List Shopping Lists
+curl -X GET http://localhost:8080/shoppingLists
+
+# 15. Delete Shopping List (ID = 2)
+curl -X DELETE http://localhost:8080/deleteShoppingList/2
+
+# 16. Process Shopping List (ID = 4)
+curl -X GET http://localhost:8080/processShoppingList/4
