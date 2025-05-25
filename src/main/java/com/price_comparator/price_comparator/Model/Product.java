@@ -6,14 +6,14 @@ import lombok.Getter;
 
 @Entity
 @AllArgsConstructor
-@Table(name="products")
+@Table(name = "products")
 @Getter
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique=true)
+    @Column(unique = true)
     private String productId; // String value for the id
 
     @Getter
@@ -27,11 +27,12 @@ public class Product {
 
     private String packageUnit;
 
-    public Product(){
+    public Product() {
 
     }
 
-    public Product(String productId, String name, String category, String brand, Double packageQuantity, String packageUnit) {
+    public Product(String productId, String name, String category, String brand, Double packageQuantity,
+                   String packageUnit) {
         this.productId = productId;
         this.name = name;
         this.category = category;
@@ -43,13 +44,24 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" +
-                "productId='" + productId + '\'' +
-                ", name='" + name + '\'' +
-                ", category='" + category + '\'' +
-                ", brand='" + brand + '\'' +
-                ", packageQuantity=" + packageQuantity +
-                ", packageUnit='" + packageUnit + '\'' +
-                '}';
+        return "Product{"
+               + "productId='"
+               + productId
+               + '\''
+               + ", name='"
+               + name
+               + '\''
+               + ", category='"
+               + category
+               + '\''
+               + ", brand='"
+               + brand
+               + '\''
+               + ", packageQuantity="
+               + packageQuantity
+               + ", packageUnit='"
+               + packageUnit
+               + '\''
+               + "}\n";
     }
 }

@@ -11,10 +11,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(
-        uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "store_id", "startDate"}),
-        name = "product_prices"
-)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "store_id", "startDate"}), name =
+        "product_prices")
 public class ProductPrice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,6 +62,6 @@ public class ProductPrice {
                + startDate
                + ", endDate="
                + endDate
-               + '}';
+               + "}\n";
     }
 }

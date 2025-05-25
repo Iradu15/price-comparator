@@ -38,9 +38,10 @@ public class AlertsServiceImpl implements AlertsService {
                 String storeName = cheapestPrice.getStoreName();
 
                 if (price <= targetPrice) {
-                    System.out.printf("Price for %s is finally below %f: %f%n",
+                    System.out.printf("Price for %s is finally below %f at %s: %f%n",
                             product.getProductId(),
                             targetPrice,
+                            cheapestPrice.getStoreName(),
                             price);
                     AlertResponseDto alertResponseDto = createDtoFromAlert(alert, storeName, price);
                     processedAlerts.add(alertResponseDto);
