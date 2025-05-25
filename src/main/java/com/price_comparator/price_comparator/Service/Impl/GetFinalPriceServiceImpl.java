@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GetFinalPriceServiceImpl implements GetFinalPriceService {
@@ -64,6 +66,62 @@ public class GetFinalPriceServiceImpl implements GetFinalPriceService {
                 product.getCategory(),
                 storeName,
                 finalPrice,
+                -1.0 // this is temporary until is calculated later
+        );
+    }
+
+    @Override
+    public FinalPrice getFinalPriceForProductAllStores(String productId) {
+
+        LocalDate currentDate = LocalDate.parse(currentDateController.getCurrentDate());
+        Product product = productRepository.findByProductId(productId).orElseThrow(
+                () -> new IllegalArgumentException("Product with " + productId + " does not exist")
+        );
+
+        Optional<List<Store>> storesHavingProduct =
+                productPriceRepository.findStoresHavingProduct(product, currentDate).filter(list -> !list.isEmpty());
+
+        if (storesHavingProduct.isEmpty()) {
+            String errMsg = String.format("In %s there are no stores having product %s%n", currentDate.toString(), product.getProductId());
+            throw new IllegalArgumentException(errMsg);
+        }
+
+
+        Double minPrice = Double.MAX_VALUE;
+        String storeName = "";
+
+        for (Store store: storesHavingProduct.get()) {
+
+            try {
+                Double price = getFinalPriceForProduct(
+                        product.getProductId(),
+                        store.getName()
+                ).getFinalPrice();
+
+                if(price <= minPrice){
+                    minPrice = price;
+                    storeName = store.getName();
+                }
+
+            } catch (Exception e){
+                System.out.printf(
+                        "Error retrieving price for %s within %s: %s%n",
+                        product.getProductId(),
+                        store.getName(),
+                        e.getMessage()
+                );
+            }
+        }
+
+        return new FinalPrice(
+                productId,
+                product.getName(),
+                product.getBrand(),
+                product.getPackageQuantity(),
+                product.getPackageUnit(),
+                product.getCategory(),
+                storeName,
+                minPrice,
                 -1.0 // this is temporary until is calculated later
         );
     }
