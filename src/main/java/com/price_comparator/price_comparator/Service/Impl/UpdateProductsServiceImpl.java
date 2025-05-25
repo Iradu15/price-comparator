@@ -1,6 +1,5 @@
 package com.price_comparator.price_comparator.Service.Impl;
 
-import com.price_comparator.price_comparator.Controller.CSVController;
 import com.price_comparator.price_comparator.Controller.CurrentDateController;
 import com.price_comparator.price_comparator.DTO.ProductDto;
 import com.price_comparator.price_comparator.Model.Product;
@@ -9,6 +8,7 @@ import com.price_comparator.price_comparator.Model.Store;
 import com.price_comparator.price_comparator.Repository.ProductPriceRepository;
 import com.price_comparator.price_comparator.Repository.ProductRepository;
 import com.price_comparator.price_comparator.Repository.StoreRepository;
+import com.price_comparator.price_comparator.Service.CsvService;
 import com.price_comparator.price_comparator.Service.UpdateProductsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +33,9 @@ public class UpdateProductsServiceImpl implements UpdateProductsService {
     @Autowired
     CurrentDateController currentDateController;
 
+    @Autowired
+    CsvService csvService;
+
     static public Product createProductFromDto(ProductDto dtoObject) {
         return new Product(dtoObject.productId(),
                 dtoObject.productName(),
@@ -44,7 +47,7 @@ public class UpdateProductsServiceImpl implements UpdateProductsService {
 
     @Override
     public void processCsvFile(MultipartFile file, String storeName, LocalDate date) {
-        List<ProductDto> retrievedProducts = CSVController.parseProductCSV(file);
+        List<ProductDto> retrievedProducts = csvService.parseProductCSV(file);
         List<ProductPrice> productPricesToBeAdded = new ArrayList<>();
 
         createStoreIfNotExistent(storeName);
