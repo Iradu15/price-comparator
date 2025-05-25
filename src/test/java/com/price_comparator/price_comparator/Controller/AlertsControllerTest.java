@@ -29,15 +29,16 @@ public class AlertsControllerTest extends AbstractBaseTest {
         setUpCurrentDate(LocalDate.now());
         setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
         String requestBody = """
-           {
-               "productId": "P001",
-               "targetPrice": 12.40
-           }
-           """;
+                {
+                    "productId": "P001",
+                    "targetPrice": 12.40
+                }
+                """;
 
-        assertThat(mockMvcTester.post().uri("/createAlert").contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody)
-        ).hasStatusOk();
+        assertThat(mockMvcTester.post()
+                .uri("/createAlert")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody)).hasStatusOk();
     }
 
     @Test
@@ -45,24 +46,24 @@ public class AlertsControllerTest extends AbstractBaseTest {
         setUpCurrentDate(LocalDate.now());
         setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
         String requestBody = """
-           {
-               "productId": "P002",
-               "targetPrice": 12.40
-           }
-           """;
+                {
+                    "productId": "P002",
+                    "targetPrice": 12.40
+                }
+                """;
 
-        assertThat(mockMvcTester.post().uri("/createAlert").contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody)
-        ).hasStatus(400);
+        assertThat(mockMvcTester.post()
+                .uri("/createAlert")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody)).hasStatus(400);
     }
 
     @Test
-    void testListAlerts(){
+    void testListAlerts() {
         Product product = setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
         setUpAlert(product, 12.3);
 
-        assertThat(mockMvcTester.get().uri("/alerts")
-        ).hasStatusOk();
+        assertThat(mockMvcTester.get().uri("/alerts")).hasStatusOk();
     }
 
     @Test
@@ -70,26 +71,23 @@ public class AlertsControllerTest extends AbstractBaseTest {
         Product product = setUpProduct("P100", "faina", "panificatie", "bucovina", 1.0, "kg");
         Long alertId = setUpAlert(product, 9.99).getId();
 
-        assertThat(mockMvcTester.delete().uri("/deleteAlert/" + alertId))
-                .hasStatusOk()
-                .hasBodyTextEqualTo("Alert with id " + alertId + " was deleted successfully");
+        assertThat(mockMvcTester.delete().uri("/deleteAlert/" + alertId)).hasStatusOk().hasBodyTextEqualTo(
+                "Alert with id " + alertId + " was deleted successfully");
     }
 
     @Test
     void testDeleteAlertNonExistentId() {
         long nonExistentId = 9999L;
 
-        assertThat(mockMvcTester.delete().uri("/deleteAlert/" + nonExistentId))
-                .hasStatus(400)
-                .hasBodyTextEqualTo("Alert with id " + nonExistentId + " does not exist");
+        assertThat(mockMvcTester.delete().uri("/deleteAlert/" + nonExistentId)).hasStatus(400).hasBodyTextEqualTo(
+                "Alert with id " + nonExistentId + " does not exist");
     }
 
     @Test
     void testDeleteAlertInvalidIdFormat() {
         String invalidId = "abc";
 
-        assertThat(mockMvcTester.delete().uri("/deleteAlert/" + invalidId))
-                .hasStatus(400)
-                .hasBodyTextEqualTo("Invalid alert ID format: " + invalidId);
+        assertThat(mockMvcTester.delete().uri("/deleteAlert/" + invalidId)).hasStatus(400).hasBodyTextEqualTo(
+                "Invalid alert ID format: " + invalidId);
     }
 }

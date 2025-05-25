@@ -5,6 +5,7 @@ import com.price_comparator.price_comparator.Repository.CurrentDateRepository;
 import com.price_comparator.price_comparator.Service.AlertsService;
 import com.price_comparator.price_comparator.Service.NextDayUpdateProductPricesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,23 +20,25 @@ public class NextDayController {
     @Autowired
     AlertsService alertsService;
 
-    @GetMapping("/next-day")
-    public void goToNextDay(){
-        CurrentDate currentDate = currentDateRepository.findById(1L)
-                .orElseThrow(() -> new RuntimeException("System state not initialized"));
+    @GetMapping("/nextDay")
+    public ResponseEntity<String> goToNextDay() {
+        CurrentDate currentDate = currentDateRepository.findById(1L).orElseThrow(() -> new RuntimeException(
+                "System state not initialized"));
         currentDate.setCurrentDay(currentDate.getCurrentDay().plusDays(1));
         currentDateRepository.save(currentDate);
 
         try {
             nextDayUpdateProductPricesService.updateProductPrice();
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.printf("Error while updating outdated productPrices: %s", e.getMessage());
         }
 
         try {
             alertsService.checkAlerts();
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.printf("Error while checking alerts status: %s", e.getMessage());
         }
+
+        return ResponseEntity.ok("Next day...." + currentDate.getCurrentDay() + "\n");
     }
 }

@@ -1,0 +1,4 @@
+product_id;product_name;brand;package_quantity;package_unit;product_category;from_date;to_date;percentage_of_discount
+P001;lapte zuzu;Zuzu;1;l;lactate;2025-05-25;2025-05-28;10
+P002;iaurt grecesc;Pilos;0.5;kg;lactate;2025-05-26;2025-05-29;20
+P005;ouă mărimea M;Lidl;10;buc;ouă;2025-05-23;2025-05-26;50

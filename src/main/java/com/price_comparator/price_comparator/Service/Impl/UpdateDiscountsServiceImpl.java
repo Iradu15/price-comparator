@@ -43,38 +43,45 @@ public class UpdateDiscountsServiceImpl implements UpdateDiscountsService {
         List<DiscountDto> retrievedDiscounts = CSVController.parseDiscountCSV(file);
         List<Discount> discountsToBeAdded = new ArrayList<>();
 
-         Store store = storeRepository.findByNameIgnoreCase(storeName)
-                .orElseThrow(() -> new IllegalArgumentException("Store with name " + storeName + " not found"));
+        Store store = storeRepository.findByNameIgnoreCase(storeName).orElseThrow(() -> new IllegalArgumentException(
+                "Store with name " + storeName + " not found"));
 
-        for(DiscountDto discountDto: retrievedDiscounts) {
+        for (DiscountDto discountDto : retrievedDiscounts) {
 
             LocalDate currentDate = LocalDate.parse(currentDateController.getCurrentDate());
-            if(discountDto.fromDate().isBefore(currentDate)){
+            if (discountDto.fromDate().isBefore(currentDate)) {
                 System.out.printf(
                         "Discount for %s - %s within %s - %s cannot be applied, it starts before current day%n",
-                        discountDto.productId(), discountDto.productName(), discountDto.fromDate(), discountDto.toDate()
-                );
+                        discountDto.productId(),
+                        discountDto.productName(),
+                        discountDto.fromDate(),
+                        discountDto.toDate());
                 continue;
             }
 
-            Product product = productRepository.findByProductId(discountDto.productId()).orElseThrow(
-                    () -> new IllegalArgumentException(
-                            "Product with ID" + discountDto.productId() + " not found, cannot apply discount\"")
-            );
+            Product product = productRepository.findByProductId(discountDto.productId())
+                    .orElseThrow(() -> new IllegalArgumentException("Product with ID"
+                                                                    + discountDto.productId()
+                                                                    + " not found, cannot apply discount\""));
 
-            productPriceRepository.findByProduct_ProductIdAndStore_Name(discountDto.productId(), storeName)
-                    .orElseThrow(() -> new IllegalStateException("Mapping between product ID " + discountDto.productId()
-                            + " and store " + storeName + " not found"));
+            productPriceRepository.findByProduct_ProductIdAndStore_Name(discountDto.productId(), storeName).orElseThrow(
+                    () -> new IllegalStateException("Mapping between product ID "
+                                                    + discountDto.productId()
+                                                    + " and store "
+                                                    + storeName
+                                                    + " not found"));
 
             Discount discount = createDiscountFromDto(discountDto, storeName);
 
-
-            if(discountsRepository.findOverlappingDiscounts(store, product, discount.getFromDate(),
-                    discount.getToDate()).filter(list -> !list.isEmpty())
-                    .isPresent()){
-                System.out.printf("Discount for %s - %s within %s - %s cannot be applied, overlapping mappings found%n"
-                        , discount.getStore().getName(), discount.getProduct().getProductId(), discount.getFromDate()
-                        , discount.getToDate());
+            if (discountsRepository.findOverlappingDiscounts(store,
+                    product,
+                    discount.getFromDate(),
+                    discount.getToDate()).filter(list -> !list.isEmpty()).isPresent()) {
+                System.out.printf("Discount for %s - %s within %s - %s cannot be applied, overlapping mappings found%n",
+                        discount.getStore().getName(),
+                        discount.getProduct().getProductId(),
+                        discount.getFromDate(),
+                        discount.getToDate());
 
                 continue;
             }
@@ -86,12 +93,16 @@ public class UpdateDiscountsServiceImpl implements UpdateDiscountsService {
         System.out.printf("Saved %d new discounts%n", discountsToBeAdded.size());
     }
 
-    public Discount createDiscountFromDto(DiscountDto discountDto, String storeName){
+    public Discount createDiscountFromDto(DiscountDto discountDto, String storeName) {
         // these checks are done above in main method, not needed here
         Store store = storeRepository.findByNameIgnoreCase(storeName).get();
         Product product = productRepository.findByProductId(discountDto.productId()).get();
 
-        return new Discount(product, store, discountDto.percentageOfDiscount(), discountDto.fromDate(), discountDto.toDate());
+        return new Discount(product,
+                store,
+                discountDto.percentageOfDiscount(),
+                discountDto.fromDate(),
+                discountDto.toDate());
     }
 
 }

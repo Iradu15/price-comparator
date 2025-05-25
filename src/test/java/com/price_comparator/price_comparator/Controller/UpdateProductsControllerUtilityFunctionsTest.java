@@ -12,7 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.time.LocalDate;
 
 @SpringBootTest
-@ActiveProfiles("test") // will be configured using application-{test}.properties
+@ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UpdateProductsControllerUtilityFunctionsTest {
 
@@ -23,7 +23,7 @@ public class UpdateProductsControllerUtilityFunctionsTest {
     UpdateProductsController updateProductsController;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         currentDateRepository.deleteAll();
 
         CurrentDate currentDate = new CurrentDate();
@@ -32,14 +32,14 @@ public class UpdateProductsControllerUtilityFunctionsTest {
     }
 
     @Test
-    void testIsFilePastTrue(){
+    void testIsFilePastTrue() {
         LocalDate fileDate = LocalDate.now().minusDays(1);
-        assert(updateProductsController.isFileDatePast(fileDate));
+        assert (updateProductsController.isFileDatePast(fileDate));
     }
 
     @Test
-    void testIsFileDatePastFalse(){
+    void testIsFileDatePastFalse() {
         LocalDate fileDate = LocalDate.now().plusDays(1);
-        assert(!updateProductsController.isFileDatePast(fileDate));
+        assert (!updateProductsController.isFileDatePast(fileDate));
     }
 }

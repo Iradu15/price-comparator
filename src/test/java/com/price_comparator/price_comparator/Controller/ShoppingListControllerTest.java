@@ -34,17 +34,18 @@ public class ShoppingListControllerTest extends AbstractBaseTest {
         setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
         setUpProduct("P011", "lapte", "lactate", "zuzu", 1.0, "l");
         String requestBody = """
-            {
-               "items": [
-                 { "productId": "P001", "quantity": 1 },
-                 { "productId": "P011", "quantity": 2 }
-               ]
-            }
-           """;
+                 {
+                    "items": [
+                      { "productId": "P001", "quantity": 1 },
+                      { "productId": "P011", "quantity": 2 }
+                    ]
+                 }
+                """;
 
-        assertThat(mockMvcTester.post().uri("/createShoppingList").contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody)
-        ).hasStatusOk();
+        assertThat(mockMvcTester.post()
+                .uri("/createShoppingList")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody)).hasStatusOk();
     }
 
     @Test
@@ -52,25 +53,25 @@ public class ShoppingListControllerTest extends AbstractBaseTest {
         setUpCurrentDate(LocalDate.now());
         setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
         String requestBody = """
-           {
-               "items": [
-                 { "productId": "P001", "quantity": 1 },
-                 { "productId": "P011", "quantity": 2 }
-               ]
-            }
-           """;
+                {
+                    "items": [
+                      { "productId": "P001", "quantity": 1 },
+                      { "productId": "P011", "quantity": 2 }
+                    ]
+                 }
+                """;
 
-        assertThat(mockMvcTester.post().uri("/createShoppingList").contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody)
-        ).hasStatus(400);
+        assertThat(mockMvcTester.post()
+                .uri("/createShoppingList")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody)).hasStatus(400);
     }
 
     @Test
-    void testListShoppingLists(){
+    void testListShoppingLists() {
         Product product = setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
         setUpShoppingList(List.of(product), List.of(1));
-        assertThat(mockMvcTester.get().uri("/shoppingLists")
-        ).hasStatusOk();
+        assertThat(mockMvcTester.get().uri("/shoppingLists")).hasStatusOk();
     }
 
     @Test
@@ -78,8 +79,7 @@ public class ShoppingListControllerTest extends AbstractBaseTest {
         Product product = setUpProduct("P100", "faina", "panificatie", "bucovina", 1.0, "kg");
         ShoppingList shoppingList = setUpShoppingList(List.of(product), List.of(1));
 
-        assertThat(mockMvcTester.delete().uri("/deleteShoppingList/" + shoppingList.getId()))
-                .hasStatusOk()
+        assertThat(mockMvcTester.delete().uri("/deleteShoppingList/" + shoppingList.getId())).hasStatusOk()
                 .hasBodyTextEqualTo("Shopping list with id " + shoppingList.getId() + " was deleted successfully");
     }
 
@@ -87,8 +87,7 @@ public class ShoppingListControllerTest extends AbstractBaseTest {
     void testDeleteShoppingListNonExistentId() {
         long nonExistentId = 9999L;
 
-        assertThat(mockMvcTester.delete().uri("/deleteShoppingList/" + nonExistentId))
-                .hasStatus(400)
+        assertThat(mockMvcTester.delete().uri("/deleteShoppingList/" + nonExistentId)).hasStatus(400)
                 .hasBodyTextEqualTo("Shopping list with id " + nonExistentId + " does not exist");
     }
 
@@ -96,9 +95,8 @@ public class ShoppingListControllerTest extends AbstractBaseTest {
     void testDeleteShoppingListInvalidIdFormat() {
         String invalidId = "abc";
 
-        assertThat(mockMvcTester.delete().uri("/deleteShoppingList/" + invalidId))
-                .hasStatus(400)
-                .hasBodyTextEqualTo("Invalid ID format: " + invalidId);
+        assertThat(mockMvcTester.delete().uri("/deleteShoppingList/" + invalidId)).hasStatus(400).hasBodyTextEqualTo(
+                "Invalid ID format: " + invalidId);
     }
 
     @Test
@@ -112,14 +110,14 @@ public class ShoppingListControllerTest extends AbstractBaseTest {
 
         ShoppingList shoppingList = setUpShoppingList(List.of(product), List.of(2));
 
-        ShoppingListResponseDto expectedResult = new ShoppingListResponseDto(
-                List.of(
-                        new ShoppingListItemDto(product.getProductId(), 2, 25.0, "Lidl")
-                ), 25.0
-        );
+        ShoppingListResponseDto expectedResult =
+                new ShoppingListResponseDto(List.of(new ShoppingListItemDto(product.getProductId(),
+                2,
+                25.0,
+                "Lidl")), 25.0);
 
-        assertThat(mockMvcTester.get().uri("/processShoppingList/" + shoppingList.getId())
-        ).hasStatusOk().hasBodyTextEqualTo("Shopping List management:\n" + expectedResult.toString());
+        assertThat(mockMvcTester.get().uri("/processShoppingList/" + shoppingList.getId())).hasStatusOk()
+                .hasBodyTextEqualTo("Shopping List management:\n" + expectedResult);
     }
 
     @Test
@@ -134,8 +132,8 @@ public class ShoppingListControllerTest extends AbstractBaseTest {
         setUpShoppingList(List.of(product), List.of(2));
 
         long id = 999L;
-        assertThat(mockMvcTester.get().uri("/processShoppingList/" + id)
-        ).hasStatus(400).hasBodyTextEqualTo("Shopping list with id " + id + " does not exist");
+        assertThat(mockMvcTester.get().uri("/processShoppingList/" + id)).hasStatus(400).hasBodyTextEqualTo(
+                "Shopping list with id " + id + " does not exist");
     }
 
     @Test
@@ -150,8 +148,8 @@ public class ShoppingListControllerTest extends AbstractBaseTest {
         setUpShoppingList(List.of(product), List.of(2));
 
         String id = "abc";
-        assertThat(mockMvcTester.get().uri("/processShoppingList/" + id)
-        ).hasStatus(400).hasBodyTextEqualTo("Invalid ID format: " + id);
+        assertThat(mockMvcTester.get().uri("/processShoppingList/" + id)).hasStatus(400).hasBodyTextEqualTo(
+                "Invalid ID format: " + id);
     }
 }
 

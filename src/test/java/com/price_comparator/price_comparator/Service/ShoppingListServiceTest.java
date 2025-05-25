@@ -25,7 +25,7 @@ public class ShoppingListServiceTest extends AbstractBaseTest {
     ShoppingListService shoppingListService;
 
     @Test
-    void testProcessOneShoppingListSuccess(){
+    void testProcessOneShoppingListSuccess() {
         LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
         Store store = setUpStoreEntity("Lidl");
         Store store2 = setUpStoreEntity("Kaufland");
@@ -37,19 +37,18 @@ public class ShoppingListServiceTest extends AbstractBaseTest {
         ShoppingList shoppingList = setUpShoppingList(List.of(product1, product2), List.of(2, 1));
 
 
-        ShoppingListResponseDto expectedResult = new ShoppingListResponseDto(
-                List.of(
-                        new ShoppingListItemDto(product1.getProductId(), 2, 25.0, "Lidl"),
-                        new ShoppingListItemDto(product2.getProductId(), 1, 30.0, "Kaufland")
-                ), 55.0
-        );
+        ShoppingListResponseDto expectedResult =
+                new ShoppingListResponseDto(List.of(new ShoppingListItemDto(product1.getProductId(),
+                2,
+                25.0,
+                "Lidl"), new ShoppingListItemDto(product2.getProductId(), 1, 30.0, "Kaufland")), 55.0);
 
         ShoppingListResponseDto res = shoppingListService.processShoppingList(shoppingList);
-        assert(res.equals(expectedResult));
+        assert (res.equals(expectedResult));
     }
 
     @Test
-    void testProcessOneShoppingListSelectCheapestStore(){
+    void testProcessOneShoppingListSelectCheapestStore() {
         LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
         Store store = setUpStoreEntity("Lidl");
         Store store2 = setUpStoreEntity("Kaufland");
@@ -60,18 +59,18 @@ public class ShoppingListServiceTest extends AbstractBaseTest {
         ShoppingList shoppingList = setUpShoppingList(List.of(product), List.of(2));
 
 
-        ShoppingListResponseDto expectedResult = new ShoppingListResponseDto(
-                List.of(
-                        new ShoppingListItemDto(product.getProductId(), 2, 25.0, "Lidl")
-                ), 25.0
-        );
+        ShoppingListResponseDto expectedResult =
+                new ShoppingListResponseDto(List.of(new ShoppingListItemDto(product.getProductId(),
+                2,
+                25.0,
+                "Lidl")), 25.0);
 
         ShoppingListResponseDto res = shoppingListService.processShoppingList(shoppingList);
-        assert(res.equals(expectedResult));
+        assert (res.equals(expectedResult));
     }
 
     @Test
-    void testProcessOneShoppingListSelectCheapestStoreWithDiscount(){
+    void testProcessOneShoppingListSelectCheapestStoreWithDiscount() {
         LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
         Store store = setUpStoreEntity("Lidl");
         Store store2 = setUpStoreEntity("Kaufland");
@@ -83,18 +82,18 @@ public class ShoppingListServiceTest extends AbstractBaseTest {
         ShoppingList shoppingList = setUpShoppingList(List.of(product), List.of(2));
 
 
-        ShoppingListResponseDto expectedResult = new ShoppingListResponseDto(
-                List.of(
-                        new ShoppingListItemDto(product.getProductId(), 2, 15.0, "Kaufland")
-                ), 15.0
-        );
+        ShoppingListResponseDto expectedResult =
+                new ShoppingListResponseDto(List.of(new ShoppingListItemDto(product.getProductId(),
+                2,
+                15.0,
+                "Kaufland")), 15.0);
 
         ShoppingListResponseDto res = shoppingListService.processShoppingList(shoppingList);
-        assert(res.equals(expectedResult));
+        assert (res.equals(expectedResult));
     }
 
     @Test
-    void testProcessOneShoppingListSelectCheapestStoreWithUnavailableDiscount(){
+    void testProcessOneShoppingListSelectCheapestStoreWithUnavailableDiscount() {
         LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
         Store store = setUpStoreEntity("Lidl");
         Store store2 = setUpStoreEntity("Kaufland");
@@ -106,14 +105,14 @@ public class ShoppingListServiceTest extends AbstractBaseTest {
         ShoppingList shoppingList = setUpShoppingList(List.of(product), List.of(2));
 
 
-        ShoppingListResponseDto expectedResult = new ShoppingListResponseDto(
-                List.of(
-                        new ShoppingListItemDto(product.getProductId(), 2, 25.0, "Lidl")
-                ), 25.0
-        );
+        ShoppingListResponseDto expectedResult =
+                new ShoppingListResponseDto(List.of(new ShoppingListItemDto(product.getProductId(),
+                2,
+                25.0,
+                "Lidl")), 25.0);
 
         ShoppingListResponseDto res = shoppingListService.processShoppingList(shoppingList);
-        assert(res.equals(expectedResult));
+        assert (res.equals(expectedResult));
     }
 }
 

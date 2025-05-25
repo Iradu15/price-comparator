@@ -25,13 +25,13 @@ public class ShoppingListServiceImpl implements ShoppingListService {
         List<ShoppingListItemDto> itemResponses = new ArrayList<>();
         double totalPrice = 0.0;
 
-        for (ShoppingListItem item : items){
+        for (ShoppingListItem item : items) {
             String productID = item.getProduct().getProductId();
             FinalPrice price;
 
             try {
                 price = getFinalPriceService.getFinalPriceForProductAllStores(productID);
-            } catch (Exception e){
+            } catch (Exception e) {
                 System.out.printf("Error retrieving price for %s: %s%n", productID, e.getMessage());
                 continue;
             }
@@ -41,12 +41,10 @@ public class ShoppingListServiceImpl implements ShoppingListService {
 
             totalPrice += priceOfAllUnits;
 
-            ShoppingListItemDto itemResponse = new ShoppingListItemDto(
-                    productID,
+            ShoppingListItemDto itemResponse = new ShoppingListItemDto(productID,
                     item.getQuantity(),
                     priceOfAllUnits,
-                    price.getStoreName()
-            );
+                    price.getStoreName());
             itemResponses.add(itemResponse);
         }
 

@@ -16,7 +16,7 @@ public class CurrentDayInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if(!currentDateRepository.existsById(1L)){
+        if (!currentDateRepository.existsById(1L)) {
             System.out.println("Current Day initialized with today's date");
             CurrentDate currentDate = new CurrentDate();
             currentDate.setCurrentDay(LocalDate.now());

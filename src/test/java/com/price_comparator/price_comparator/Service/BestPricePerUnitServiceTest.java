@@ -25,7 +25,7 @@ public class BestPricePerUnitServiceTest extends AbstractBaseTest {
     BestPricePerUnitService bestPricePerUnitService;
 
     @Test
-    void testGetBestProductsPerUnitWithoutDiscount(){
+    void testGetBestProductsPerUnitWithoutDiscount() {
         LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
         Store store = setUpStoreEntity("lidl");
         Product product = setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
@@ -37,8 +37,7 @@ public class BestPricePerUnitServiceTest extends AbstractBaseTest {
         List<FinalPrice> bestProductsPerUnit = bestPricePerUnitService.getBestProductsPerUnit(2);
         assert (bestProductsPerUnit.size() == 2);
 
-        FinalPrice expectedResultFirst = new FinalPrice(
-                product2.getProductId(),
+        FinalPrice expectedResultFirst = new FinalPrice(product2.getProductId(),
                 product2.getName(),
                 product2.getBrand(),
                 product2.getPackageQuantity(),
@@ -46,14 +45,13 @@ public class BestPricePerUnitServiceTest extends AbstractBaseTest {
                 product2.getCategory(),
                 store.getName(),
                 10.0,
-                5.0
-        );
+                5.0);
 
         assert (bestProductsPerUnit.getFirst().equals(expectedResultFirst));
     }
 
     @Test
-    void testGetBestProductsPerUnitWithDiscount(){
+    void testGetBestProductsPerUnitWithDiscount() {
         LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
         Store store = setUpStoreEntity("lidl");
         Product product = setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
@@ -66,8 +64,7 @@ public class BestPricePerUnitServiceTest extends AbstractBaseTest {
         List<FinalPrice> bestProductsPerUnit = bestPricePerUnitService.getBestProductsPerUnit(2);
         assert (bestProductsPerUnit.size() == 2);
 
-        FinalPrice expectedResultFirst = new FinalPrice(
-                product.getProductId(),
+        FinalPrice expectedResultFirst = new FinalPrice(product.getProductId(),
                 product.getName(),
                 product.getBrand(),
                 product.getPackageQuantity(),
@@ -75,14 +72,13 @@ public class BestPricePerUnitServiceTest extends AbstractBaseTest {
                 product.getCategory(),
                 store.getName(),
                 1.0,
-                1.0
-        );
+                1.0);
 
         assert (bestProductsPerUnit.getFirst().equals(expectedResultFirst));
     }
 
     @Test
-    void testGetBestProductsPerUnitWithoutDiscountNewMappingIsBad(){
+    void testGetBestProductsPerUnitWithoutDiscountNewMappingIsBad() {
         /*
         First mapping for product is cheap but no longer available, second is more expensive than second product
         */
@@ -98,8 +94,7 @@ public class BestPricePerUnitServiceTest extends AbstractBaseTest {
         List<FinalPrice> bestProductsPerUnit = bestPricePerUnitService.getBestProductsPerUnit(2);
         assert (bestProductsPerUnit.size() == 2);
 
-        FinalPrice expectedResultFirst = new FinalPrice(
-                product2.getProductId(),
+        FinalPrice expectedResultFirst = new FinalPrice(product2.getProductId(),
                 product2.getName(),
                 product2.getBrand(),
                 product2.getPackageQuantity(),
@@ -107,29 +102,28 @@ public class BestPricePerUnitServiceTest extends AbstractBaseTest {
                 product2.getCategory(),
                 store.getName(),
                 10.0,
-                5.0
-        );
+                5.0);
 
         assert (bestProductsPerUnit.getFirst().equals(expectedResultFirst));
     }
 
     @Test
-    void testGetBestProductsPerUnitThrowRuntimeException(){
-        LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
-        Store store = setUpStoreEntity("lidl");
-        Product product = setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
-        Product product2 = setUpProduct("P002", "lapte", "lactate", "napolact", 2.0, "l");
+    void testGetBestProductsPerUnitThrowRuntimeException() {
+        setUpCurrentDate(LocalDate.now());
+        setUpStoreEntity("lidl");
+        setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
+        setUpProduct("P002", "lapte", "lactate", "napolact", 2.0, "l");
 
         Exception exception = assertThrows(RuntimeException.class, () -> {
-            List<FinalPrice> bestProductsPerUnit = bestPricePerUnitService.getBestProductsPerUnit(2);
+            bestPricePerUnitService.getBestProductsPerUnit(2);
         });
 
         String errMessage = exception.getMessage();
-        assert(errMessage.contains("No ProductPrices available for the moment, add some first"));
+        assert (errMessage.contains("No ProductPrices available for the moment, add some first"));
     }
 
     @Test
-    void testGetBestProductsPerUnitMoreSizeThanMappings(){
+    void testGetBestProductsPerUnitMoreSizeThanMappings() {
         LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
         Store store = setUpStoreEntity("lidl");
         Product product = setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
@@ -144,7 +138,7 @@ public class BestPricePerUnitServiceTest extends AbstractBaseTest {
     }
 
     @Test
-    void testGetBestProductsPerUnitDifferentUnits(){
+    void testGetBestProductsPerUnitDifferentUnits() {
         LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
         Store store = setUpStoreEntity("lidl");
         Product product = setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
@@ -156,8 +150,7 @@ public class BestPricePerUnitServiceTest extends AbstractBaseTest {
         List<FinalPrice> bestProductsPerUnit = bestPricePerUnitService.getBestProductsPerUnit(2);
         assert (bestProductsPerUnit.size() == 2);
 
-        FinalPrice expectedResultFirst = new FinalPrice(
-                product2.getProductId(),
+        FinalPrice expectedResultFirst = new FinalPrice(product2.getProductId(),
                 product2.getName(),
                 product2.getBrand(),
                 product2.getPackageQuantity(),
@@ -165,8 +158,7 @@ public class BestPricePerUnitServiceTest extends AbstractBaseTest {
                 product2.getCategory(),
                 store.getName(),
                 1.5,
-                7.5
-        );
+                7.5);
 
         assert (bestProductsPerUnit.getFirst().equals(expectedResultFirst));
     }

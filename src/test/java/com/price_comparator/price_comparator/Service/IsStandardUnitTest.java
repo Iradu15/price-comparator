@@ -12,37 +12,37 @@ import org.springframework.test.context.ActiveProfiles;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class IsStandardUnitTest extends AbstractBaseTest {
     @Test
-    void testIsStandardUnitL(){
-        assert(BestPricePerUnitService.isStandardUnit("l"));
+    void testIsStandardUnitL() {
+        assert (BestPricePerUnitService.isStandardUnit("l"));
     }
 
     @Test
-    void testIsStandardUnitKg(){
-        assert(BestPricePerUnitService.isStandardUnit("kg"));
+    void testIsStandardUnitKg() {
+        assert (BestPricePerUnitService.isStandardUnit("kg"));
     }
 
     @Test
-    void testIsStandardUnitBuc(){
-        assert(BestPricePerUnitService.isStandardUnit("buc"));
+    void testIsStandardUnitBuc() {
+        assert (BestPricePerUnitService.isStandardUnit("buc"));
     }
 
     @Test
-    void testIsStandardUnitRole(){
-        assert(BestPricePerUnitService.isStandardUnit("role"));
+    void testIsStandardUnitRole() {
+        assert (BestPricePerUnitService.isStandardUnit("role"));
     }
 
     @Test
-    void testIsNotStandardUnitG(){
-        assert(!BestPricePerUnitService.isStandardUnit("g"));
+    void testIsNotStandardUnitG() {
+        assert (!BestPricePerUnitService.isStandardUnit("g"));
     }
 
     @Test
-    void testIsNotStandardUnitMl(){
-        assert(!BestPricePerUnitService.isStandardUnit("ml"));
+    void testIsNotStandardUnitMl() {
+        assert (!BestPricePerUnitService.isStandardUnit("ml"));
     }
 
     @Test
-    void testIsNotStandardUnitUnknown(){
-        assert(!BestPricePerUnitService.isStandardUnit("m"));
+    void testIsNotStandardUnitUnknown() {
+        assert (!BestPricePerUnitService.isStandardUnit("m"));
     }
 }

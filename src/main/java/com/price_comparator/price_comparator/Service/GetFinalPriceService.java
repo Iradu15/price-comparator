@@ -1,7 +1,6 @@
 package com.price_comparator.price_comparator.Service;
 
 import com.price_comparator.price_comparator.DTO.FinalPrice;
-import org.apache.coyote.BadRequestException;
 
 public interface GetFinalPriceService {
     /*

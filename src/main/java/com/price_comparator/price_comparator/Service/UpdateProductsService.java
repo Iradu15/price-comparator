@@ -13,5 +13,3 @@ public interface UpdateProductsService {
     //    Update existent productPrices
     void updateOldMapping(ProductPrice oldProductPrice, ProductDto productDto, String storeName, LocalDate date);
 }
-
-

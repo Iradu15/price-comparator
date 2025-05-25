@@ -26,18 +26,17 @@ public class CSVController {
                 if (components.length < 8) continue; // skip invalid lines
 
                 ProductDto productDto = new ProductDto(components[0].trim(),
-                    components[1].trim(),
-                    components[2].trim(),
-                    components[3].trim(),
-                    Double.parseDouble(components[4].trim()),
-                    components[5].trim(),
-                    Double.parseDouble(components[6].trim()),
-                    components[7].trim()
-                );
+                        components[1].trim(),
+                        components[2].trim(),
+                        components[3].trim(),
+                        Double.parseDouble(components[4].trim()),
+                        components[5].trim(),
+                        Double.parseDouble(components[6].trim()),
+                        components[7].trim());
                 retrievedProductDtos.add(productDto);
             }
 
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Error parsing CSV file " + file.getOriginalFilename() + ": " + e);
         }
 
@@ -66,12 +65,11 @@ public class CSVController {
                         components[5].trim(),
                         LocalDate.parse(components[6].trim()),
                         LocalDate.parse(components[7].trim()),
-                        Integer.parseInt(components[8].trim())
-                );
+                        Integer.parseInt(components[8].trim()));
                 retrievedDiscountsDto.add(discountDto);
             }
 
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Error parsing CSV file " + file.getOriginalFilename() + ": " + e);
         }
 

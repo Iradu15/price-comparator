@@ -16,14 +16,18 @@ public class BestPricePerUnitController {
     BestPricePerUnitService bestPricePerUnitService;
 
     @GetMapping("bestPricePerUnit")
-    ResponseEntity<String> getBestPricePerUnit(@RequestParam Integer size){
+    ResponseEntity<String> getBestPricePerUnit(@RequestParam(defaultValue = "10") Integer size) {
         System.out.printf("Retrieving top %d products based on unit / price", size);
 
-        try{
+        try {
             List<FinalPrice> bestPricePerUnit = bestPricePerUnitService.getBestProductsPerUnit(size);
-            return ResponseEntity.ok("Best " + size + " products by unit / price are: \n" + bestPricePerUnit.toString());
-        }catch (Exception e){
-            return ResponseEntity.internalServerError().body("Error while retrieving best products by unit / price: " + e.getMessage());
+            return ResponseEntity.ok("Best "
+                                     + size
+                                     + " products by unit / price are: \n"
+                                     + bestPricePerUnit.toString());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error while retrieving best products by unit / price: "
+                                                             + e.getMessage());
         }
     }
 }

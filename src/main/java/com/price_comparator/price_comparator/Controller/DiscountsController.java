@@ -21,29 +21,35 @@ public class DiscountsController {
     CurrentDateController currentDateController;
 
     @GetMapping("topDiscounts")
-    ResponseEntity<String> getTopDiscounts(@RequestParam Integer size){
+    ResponseEntity<String> getTopDiscounts(@RequestParam(defaultValue = "10") Integer size) {
         System.out.printf("Retrieving top %d active discounts", size);
-        try{
+        try {
             LocalDate currentDate = LocalDate.parse(currentDateController.getCurrentDate());
-            List<Discount> topDiscounts = discountsRepository.findTopActiveDiscounts(currentDate, size).orElse(Collections.emptyList());
-            return ResponseEntity.ok().body("Top " + size + " discounts available:\n " + topDiscounts.toString());
+            List<Discount> topDiscounts = discountsRepository.findTopActiveDiscounts(currentDate, size).orElse(
+                    Collections.emptyList());
 
-        } catch (Exception e){
-            return ResponseEntity.internalServerError().body("Error retrieving top " + size + " discounts available: " + e.getMessage());
+            return ResponseEntity.ok().body("Top " + size + " discounts available:\n " + topDiscounts);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error retrieving top "
+                                                             + size
+                                                             + " discounts available: "
+                                                             + e.getMessage());
         }
     }
 
     @GetMapping("discounts/latest")
-    ResponseEntity<String> getLatestDiscounts(){
+    ResponseEntity<String> getLatestDiscounts() {
         System.out.println("Retrieving latest active discounts (from 24 h ago)");
-        try{
+        try {
             LocalDate currentDate = LocalDate.parse(currentDateController.getCurrentDate());
             LocalDate yesterday = currentDate.minusDays(1);
-            List<Discount> latestDiscounts = discountsRepository.findAllAvailableLastDayDiscounts(currentDate,yesterday).orElse(Collections.emptyList());
-            return ResponseEntity.ok("Latest active discounts:\n " + latestDiscounts.toString());
-        }
-        catch (Exception e){
-            return ResponseEntity.internalServerError().body("Error retrieving latest active discounts " + e.getMessage());
+            List<Discount> latestDiscounts = discountsRepository.findAllAvailableLastDayDiscounts(currentDate,
+                    yesterday).orElse(Collections.emptyList());
+
+            return ResponseEntity.ok("Latest active discounts:\n " + latestDiscounts);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error retrieving latest active discounts "
+                                                             + e.getMessage());
         }
     }
 }
