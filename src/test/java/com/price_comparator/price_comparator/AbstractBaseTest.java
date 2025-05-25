@@ -1,6 +1,7 @@
 package com.price_comparator.price_comparator;
 
 import com.price_comparator.price_comparator.Controller.CurrentDateController;
+import com.price_comparator.price_comparator.DTO.ShoppingListItemDto;
 import com.price_comparator.price_comparator.Model.*;
 import com.price_comparator.price_comparator.Repository.*;
 import com.price_comparator.price_comparator.Service.AlertsService;
@@ -12,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @SpringBootTest
@@ -43,8 +46,12 @@ public abstract class AbstractBaseTest {
     @Autowired
     public AlertsRepository alertsRepository;
 
+    @Autowired
+    public ShoppingListRepository shoppingListRepository;
+
     @BeforeEach
     void deleteAll() {
+        shoppingListRepository.deleteAll();
         alertsRepository.deleteAll();
         discountsRepository.deleteAll();
         currentDateRepository.deleteAll();
@@ -94,5 +101,20 @@ public abstract class AbstractBaseTest {
         alertsRepository.save(alert);
         alertsRepository.flush();
         return alert;
+    }
+
+    public ShoppingList setUpShoppingList(List<Product> products, List<Integer> quantities){
+        List<ShoppingListItem> items = new ArrayList<>();
+        ShoppingList shoppingList = new ShoppingList();
+        for(int i = 0; i < products.size(); i++){
+            Product product = products.get(i);
+            int quantity = quantities.get(i);
+            items.add(new ShoppingListItem(product, shoppingList, quantity));
+        }
+        shoppingList.setShoppingListItems(items);
+        shoppingListRepository.save(shoppingList);
+        shoppingListRepository.flush();
+
+        return shoppingList;
     }
 }

@@ -92,5 +92,4 @@ public class AlertsControllerTest extends AbstractBaseTest {
                 .hasStatus(400)
                 .hasBodyTextEqualTo("Invalid alert ID format: " + invalidId);
     }
-
 }
