@@ -20,7 +20,7 @@ curl -X POST http://localhost:8080/update/discounts \
 ### Discounts
 
 # 5. Top Discounts
-curl -X GET http://localhost:8080/top-discounts
+curl -X GET http://localhost:8080/topDiscounts
 
 # 6. Discounts in Last 24h
 curl -X GET http://localhost:8080/discounts/latest
@@ -50,7 +50,7 @@ curl -X DELETE http://localhost:8080/deleteAlert/1
 curl -X GET http://localhost:8080/alert/1
 
 # 12. Check Alerts (endpoint assumed)
-curl -X GET http://localhost:8080/check-alerts
+curl -X GET http://localhost:8080/checkAlerts
 
 ### Shopping List
 

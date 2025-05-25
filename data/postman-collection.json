@@ -3,7 +3,8 @@
 		"_postman_id": "5d93133d-3dd5-40cb-8e8c-16e7cedcdd0d",
 		"name": "price-comparator",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "26718006"
+		"_exporter_id": "26718006",
+		"_collection_link": "https://sparrow-core-backend.postman.co/workspace/My-Workspace~584ff514-302f-4f6a-8b73-50f3773735f7/collection/26718006-5d93133d-3dd5-40cb-8e8c-16e7cedcdd0d?action=share&source=collection_link&creator=26718006"
 	},
 	"item": [
 		{
@@ -34,14 +35,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/next-day",
+							"raw": "http://localhost:8080/nextDay",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"next-day"
+								"nextDay"
 							]
 						}
 					},
@@ -63,7 +64,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/home/radu/projects/price-compparator/data/lidl_2025-05-20.csv"
+									"src": "/home/radu/projects/price-compparator/data/lidl_2025-05-25.csv"
 								}
 							]
 						},
@@ -92,7 +93,7 @@
 								{
 									"key": "file",
 									"type": "file",
-									"src": "/home/radu/projects/price-compparator/data/profi_discounts_2025-05-20.csv"
+									"src": "/home/radu/projects/price-compparator/data/lidl_discounts_2025-05-25.csv"
 								}
 							]
 						},
@@ -120,7 +121,24 @@
 					"name": "top-discounts",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/topDiscounts?size=5",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"topDiscounts"
+							],
+							"query": [
+								{
+									"key": "size",
+									"value": "5"
+								}
+							]
+						}
 					},
 					"response": []
 				},
@@ -186,7 +204,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"productId\": \"P001\",\n    \"targetPrice\": 20.1\n}",
+							"raw": "{\n    \"productId\": \"P001\",\n    \"targetPrice\": 11.0\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -277,7 +295,18 @@
 					"name": "check-alerts",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/checkAlerts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"checkAlerts"
+							]
+						}
 					},
 					"response": []
 				}
@@ -293,7 +322,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"items\": [\n    { \"productId\": \"P001\", \"quantity\": 1 },\n    { \"productId\": \"P011\", \"quantity\": 2 }\n  ]\n}\n",
+							"raw": "{\n  \"items\": [\n    { \"productId\": \"P0001\", \"quantity\": -1 },\n    { \"productId\": \"P002\", \"quantity\": 2 },\n    { \"productId\": \"P005\", \"quantity\": 2 }\n  ]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -339,7 +368,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/deleteShoppingList/2",
+							"raw": "http://localhost:8080/deleteShoppingList/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -347,7 +376,7 @@
 							"port": "8080",
 							"path": [
 								"deleteShoppingList",
-								"2"
+								"4"
 							]
 						}
 					},
