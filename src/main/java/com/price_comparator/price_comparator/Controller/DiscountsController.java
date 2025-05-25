@@ -21,7 +21,7 @@ public class DiscountsController {
     CurrentDateController currentDateController;
 
     @GetMapping("topDiscounts")
-    ResponseEntity<String> getTopDiscounts(@RequestParam Integer size) {
+    ResponseEntity<String> getTopDiscounts(@RequestParam(defaultValue = "10") Integer size) {
         System.out.printf("Retrieving top %d active discounts", size);
         try {
             LocalDate currentDate = LocalDate.parse(currentDateController.getCurrentDate());
@@ -31,9 +31,9 @@ public class DiscountsController {
             return ResponseEntity.ok().body("Top " + size + " discounts available:\n " + topDiscounts);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Error retrieving top "
-                    + size
-                    + " discounts available: "
-                    + e.getMessage());
+                                                             + size
+                                                             + " discounts available: "
+                                                             + e.getMessage());
         }
     }
 
@@ -49,7 +49,7 @@ public class DiscountsController {
             return ResponseEntity.ok("Latest active discounts:\n " + latestDiscounts);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Error retrieving latest active discounts "
-                    + e.getMessage());
+                                                             + e.getMessage());
         }
     }
 }

@@ -19,7 +19,7 @@ public class NextDayController {
     @Autowired
     AlertsService alertsService;
 
-    @GetMapping("/next-day")
+    @GetMapping("/nextDay")
     public void goToNextDay() {
         CurrentDate currentDate = currentDateRepository.findById(1L).orElseThrow(() -> new RuntimeException(
                 "System state not initialized"));
