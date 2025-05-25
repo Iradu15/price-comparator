@@ -31,10 +31,11 @@ You can find the implementation details of the solution by following this: ["**g
 - `cd price-comparator` into and run:
     - `docker compose up -d` to start `Postgres` via `Docker`
     - Run the application using `./mvnw spring-boot:run`
+    - for running tests: `./mvnw test`
 
 - TIP for requests, in `/data` directory you can find:
-    - `Postman` dump: `price-comparator.postman_collection.json`
-    - For `curl` alternative: `curl.txt`
+    - `Postman` dump: `postman_collection.json`
+    - `curl` alternative: `curl.txt`
 
 For further reference, please consider the following sections:
 
