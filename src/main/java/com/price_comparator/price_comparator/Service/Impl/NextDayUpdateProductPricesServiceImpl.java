@@ -26,10 +26,10 @@ public class NextDayUpdateProductPricesServiceImpl implements NextDayUpdateProdu
         - set endDate for the currentMapping to today - 1 day
         */
         LocalDate currentDate = LocalDate.parse(currentDateController.getCurrentDate());
-        if(productPriceRepository.findAllCurrentPricesThatNeedToBeReplaced(currentDate).isEmpty())
-            return;
+        if (productPriceRepository.findAllCurrentPricesThatNeedToBeReplaced(currentDate).isEmpty()) return;
 
-        List<ProductPrice> pricesThatNeedToBeReplaced = productPriceRepository.findAllCurrentPricesThatNeedToBeReplaced(currentDate).get();
+        List<ProductPrice> pricesThatNeedToBeReplaced = productPriceRepository.findAllCurrentPricesThatNeedToBeReplaced(
+                currentDate).get();
 
         for (ProductPrice productPrice : pricesThatNeedToBeReplaced)
             productPrice.setEndDate(currentDate.minusDays(1));

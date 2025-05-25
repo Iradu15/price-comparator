@@ -11,7 +11,6 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 
 @SpringBootTest
@@ -27,17 +26,17 @@ public class DiscountsRepositoryTest extends AbstractBaseTest {
         Store store = setUpStoreEntity("lidl");
         Product product = setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
         setUpProductPrice(store, product, "ron", 10.0, currentDate.minusDays(1), null);
-        Discount discount = setUpDiscount(product, store, 10, currentDate, currentDate.plusDays(1));
-        Discount discount2 = setUpDiscount(product, store, 15, currentDate.plusDays(2), currentDate.plusDays(3));
+        setUpDiscount(product, store, 10, currentDate, currentDate.plusDays(1));
+        setUpDiscount(product, store, 15, currentDate.plusDays(2), currentDate.plusDays(3));
 
         Product product2 = setUpProduct("P002", "lapte", "lactate", "zuzu", 2.0, "l");
         setUpProductPrice(store, product2, "ron", 15.0, currentDate.minusDays(1), null);
-        Discount discount3 = setUpDiscount(product2, store, 30, currentDate, currentDate.plusDays(1));
+        setUpDiscount(product2, store, 30, currentDate, currentDate.plusDays(1));
 
         int size = 2;
         List<Discount> topDiscounts = discountsRepository.findTopActiveDiscounts(currentDate, size).get();
 
-        assert(topDiscounts.size() == size);
+        assert (topDiscounts.size() == size);
     }
 
     @Test
@@ -61,10 +60,10 @@ public class DiscountsRepositoryTest extends AbstractBaseTest {
 
         /*
         discount2 > discount, but discount2 is not active yey
-         */
+        */
 
-        assert(topDiscounts.get(0).getPercentageOfDiscount().equals(discount3.getPercentageOfDiscount()));
-        assert(topDiscounts.get(1).getPercentageOfDiscount().equals(discount.getPercentageOfDiscount()));
+        assert (topDiscounts.get(0).getPercentageOfDiscount().equals(discount3.getPercentageOfDiscount()));
+        assert (topDiscounts.get(1).getPercentageOfDiscount().equals(discount.getPercentageOfDiscount()));
     }
 
     @Test
@@ -78,7 +77,7 @@ public class DiscountsRepositoryTest extends AbstractBaseTest {
         setUpDiscount(product, store, 10, LocalDate.of(2025, 5, 5), LocalDate.of(2025, 5, 12));
 
         List<Discount> overlaps = discountsRepository.findOverlappingDiscounts(store, product, from, to).get();
-        assert(overlaps.size() == 1);
+        assert (overlaps.size() == 1);
     }
 
     @Test
@@ -92,7 +91,7 @@ public class DiscountsRepositoryTest extends AbstractBaseTest {
         setUpDiscount(product, store, 20, LocalDate.of(2025, 5, 18), LocalDate.of(2025, 5, 25));
 
         List<Discount> overlaps = discountsRepository.findOverlappingDiscounts(store, product, from, to).get();
-        assert(overlaps.size() == 1);
+        assert (overlaps.size() == 1);
     }
 
     @Test
@@ -106,7 +105,7 @@ public class DiscountsRepositoryTest extends AbstractBaseTest {
         Discount existing = setUpDiscount(product, store, 5, LocalDate.of(2025, 5, 10), LocalDate.of(2025, 5, 15));
 
         List<Discount> overlaps = discountsRepository.findOverlappingDiscounts(store, product, from, to).get();
-        assert(overlaps.size() == 1);
+        assert (overlaps.size() == 1);
     }
 
     @Test
@@ -120,7 +119,7 @@ public class DiscountsRepositoryTest extends AbstractBaseTest {
         Discount existing = setUpDiscount(product, store, 5, LocalDate.of(2025, 5, 1), LocalDate.of(2025, 5, 30));
 
         List<Discount> overlaps = discountsRepository.findOverlappingDiscounts(store, product, from, to).get();
-        assert(overlaps.size() == 1);
+        assert (overlaps.size() == 1);
     }
 
     @Test
@@ -134,11 +133,11 @@ public class DiscountsRepositoryTest extends AbstractBaseTest {
         Discount existing = setUpDiscount(product, store, 7, LocalDate.of(2025, 5, 1), LocalDate.of(2025, 5, 15));
 
         List<Discount> overlaps = discountsRepository.findOverlappingDiscounts(store, product, from, to).get();
-        assert(overlaps.isEmpty());
+        assert (overlaps.isEmpty());
     }
 
     @Test
-    void testAvailableLastDayDiscountsSelectsItemsFromLastDay(){
+    void testAvailableLastDayDiscountsSelectsItemsFromLastDay() {
         LocalDate currentDate = LocalDate.now();
 
         Store store = setUpStoreEntity("lidl");
@@ -149,17 +148,18 @@ public class DiscountsRepositoryTest extends AbstractBaseTest {
 
         /*
         discount1 started 2 days previous to current date, not 1
-         */
+        */
 
-        LocalDate yesterDay = currentDate.minusDays(1);
-        List<Discount> lastDiscounts = discountsRepository.findAllAvailableLastDayDiscounts(currentDate, yesterDay).get();
+        LocalDate yesterday = currentDate.minusDays(1);
+        List<Discount> lastDiscounts = discountsRepository.findAllAvailableLastDayDiscounts(currentDate, yesterday)
+                .get();
 
-        assert(lastDiscounts.size() == 1);
-        assert(lastDiscounts.getFirst().getPercentageOfDiscount() == 16);
+        assert (lastDiscounts.size() == 1);
+        assert (lastDiscounts.getFirst().getPercentageOfDiscount() == 16);
     }
 
     @Test
-    void testAvailableLastDayDiscountsSelectAvailableDiscounts(){
+    void testAvailableLastDayDiscountsSelectAvailableDiscounts() {
         LocalDate currentDate = LocalDate.now();
 
         Store store = setUpStoreEntity("lidl");
@@ -172,11 +172,12 @@ public class DiscountsRepositoryTest extends AbstractBaseTest {
         discount1 started 1 day previous to current date, but it's no longer active
         */
 
-        LocalDate yesterDay = currentDate.minusDays(1);
-        List<Discount> lastDiscounts = discountsRepository.findAllAvailableLastDayDiscounts(currentDate, yesterDay).get();
+        LocalDate yesterday = currentDate.minusDays(1);
+        List<Discount> lastDiscounts = discountsRepository.findAllAvailableLastDayDiscounts(currentDate, yesterday)
+                .get();
 
-        assert(lastDiscounts.size() == 1);
-        assert(lastDiscounts.getFirst().getPercentageOfDiscount() == 16);
+        assert (lastDiscounts.size() == 1);
+        assert (lastDiscounts.getFirst().getPercentageOfDiscount() == 16);
     }
 
     @Test
@@ -189,7 +190,7 @@ public class DiscountsRepositoryTest extends AbstractBaseTest {
 
         Discount result = discountsRepository.findActiveDiscount(store, product, currentDate).get();
 
-        assert(result.getPercentageOfDiscount() == 10);
+        assert (result.getPercentageOfDiscount() == 10);
     }
 
     @Test
@@ -199,7 +200,7 @@ public class DiscountsRepositoryTest extends AbstractBaseTest {
         Product product = setUpProduct("P105", "suc", "bauturi", "prigat", 3.0, "l");
         setUpDiscount(product, store, 5, currentDate.minusDays(5), currentDate.minusDays(1));
 
-        assert(discountsRepository.findActiveDiscount(store, product, currentDate).isEmpty());
+        assert (discountsRepository.findActiveDiscount(store, product, currentDate).isEmpty());
     }
 
     @Test
@@ -209,6 +210,6 @@ public class DiscountsRepositoryTest extends AbstractBaseTest {
         Product product = setUpProduct("P106", "faina", "panificatie", "baneasa", 2.5, "kg");
         setUpDiscount(product, store, 7, currentDate.plusDays(1), currentDate.plusDays(5));
 
-        assert(discountsRepository.findActiveDiscount(store, product, currentDate).isEmpty());
+        assert (discountsRepository.findActiveDiscount(store, product, currentDate).isEmpty());
     }
 }

@@ -55,9 +55,9 @@ public class AlertsController {
 
 
     @GetMapping("alerts")
-    ResponseEntity<String> alerts(){
+    ResponseEntity<String> alerts() {
         List<Alert> alertList = alertsRepository.findAll();
-        return ResponseEntity.ok("Available alerts:\n" + alertList.toString());
+        return ResponseEntity.ok("Available alerts:\n" + alertList);
     }
 
     @GetMapping("alert/{id}")
@@ -86,21 +86,19 @@ public class AlertsController {
             return ResponseEntity.badRequest().body("Invalid alert ID format: " + id);
         }
 
-        return alertsRepository.findById(alertId)
-                .map(alert -> {
-                    alertsRepository.deleteById(alertId);
-                    return ResponseEntity.ok("Alert with id " + id + " was deleted successfully");
-                })
-                .orElseGet(() -> ResponseEntity.badRequest().body("Alert with id " + id + " does not exist"));
+        return alertsRepository.findById(alertId).map(alert -> {
+            alertsRepository.deleteById(alertId);
+            return ResponseEntity.ok("Alert with id " + id + " was deleted successfully");
+        }).orElseGet(() -> ResponseEntity.badRequest().body("Alert with id " + id + " does not exist"));
     }
 
     @GetMapping("checkAlerts")
-    public ResponseEntity<String> checkAlerts(){
-        try{
+    public ResponseEntity<String> checkAlerts() {
+        try {
             System.out.println("Checking alerts status");
             String log = alertsService.checkAlerts();
             return ResponseEntity.ok(log);
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Error while checking alerts status " + e.getMessage());
         }
     }

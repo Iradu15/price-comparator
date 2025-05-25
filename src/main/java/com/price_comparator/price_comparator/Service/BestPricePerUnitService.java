@@ -6,9 +6,6 @@ import com.price_comparator.price_comparator.Enum.StandardUnits;
 import java.util.List;
 
 public interface BestPricePerUnitService {
-    List<FinalPrice> getBestProductsPerUnit(int size);
-    FinalPrice standardizePrice(FinalPrice price);
-
     static boolean isStandardUnit(String unit) {
         /*
         Check if unit measure is already standard
@@ -21,4 +18,8 @@ public interface BestPricePerUnitService {
 
         return false;
     }
+
+    List<FinalPrice> getBestProductsPerUnit(int size);
+
+    FinalPrice standardizePrice(FinalPrice price);
 }

@@ -9,7 +9,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="system_date")
+@Table(name = "system_date")
 public class CurrentDate {
     @Id
     private Long id = 1L;

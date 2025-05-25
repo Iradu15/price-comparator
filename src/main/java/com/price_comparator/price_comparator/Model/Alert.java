@@ -1,18 +1,16 @@
 package com.price_comparator.price_comparator.Model;
 
-import com.price_comparator.price_comparator.Controller.CurrentDateController;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="alerts")
+@Table(name = "alerts")
 @Getter
 public class Alert {
     @Id
@@ -38,7 +36,7 @@ public class Alert {
         return "Alert{" + "id=" + id + ", product=" + product + ", targetPrice=" + targetPrice + "}\n";
     }
 
-    public String shortLog(){
+    public String shortLog() {
         return "Product " + product.getProductId() + " at " + targetPrice + "\n";
     }
 }

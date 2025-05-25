@@ -20,21 +20,21 @@ public class NextDayController {
     AlertsService alertsService;
 
     @GetMapping("/next-day")
-    public void goToNextDay(){
-        CurrentDate currentDate = currentDateRepository.findById(1L)
-                .orElseThrow(() -> new RuntimeException("System state not initialized"));
+    public void goToNextDay() {
+        CurrentDate currentDate = currentDateRepository.findById(1L).orElseThrow(() -> new RuntimeException(
+                "System state not initialized"));
         currentDate.setCurrentDay(currentDate.getCurrentDay().plusDays(1));
         currentDateRepository.save(currentDate);
 
         try {
             nextDayUpdateProductPricesService.updateProductPrice();
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.printf("Error while updating outdated productPrices: %s", e.getMessage());
         }
 
         try {
             alertsService.checkAlerts();
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.printf("Error while checking alerts status: %s", e.getMessage());
         }
     }

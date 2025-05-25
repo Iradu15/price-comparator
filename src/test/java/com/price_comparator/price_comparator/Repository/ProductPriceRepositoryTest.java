@@ -13,7 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @SpringBootTest
-@ActiveProfiles("test") // will be configured using application-{test}.properties
+@ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ProductPriceRepositoryTest extends AbstractBaseTest {
 
@@ -42,11 +42,11 @@ public class ProductPriceRepositoryTest extends AbstractBaseTest {
         Product product = setUpProduct("P002", "lapte", "lactate", "zuzu", 2.0, "l");
         setUpProductPrice(store, product, "ron", 18.0, currentDate.plusDays(1), null);
 
-        assert(productPriceRepository.findCurrentPrice(product, store, currentDate).isEmpty());
+        assert (productPriceRepository.findCurrentPrice(product, store, currentDate).isEmpty());
     }
 
     @Test
-    void testFindAllCurrentPricesThatNeedToBeReplacedCorrectCount(){
+    void testFindAllCurrentPricesThatNeedToBeReplacedCorrectCount() {
         /*
         Test that method selects correct mappings
         */
@@ -60,13 +60,14 @@ public class ProductPriceRepositoryTest extends AbstractBaseTest {
         setUpProductPrice(store, product2, "ron", 15.0, currentDate.plusDays(1), null);
 
         List<ProductPrice> mappingsThatNeedToBeReplaced =
-                productPriceRepository.findAllCurrentPricesThatNeedToBeReplaced(currentDate).get();
+                productPriceRepository.findAllCurrentPricesThatNeedToBeReplaced(
+                currentDate).get();
 
         assert (mappingsThatNeedToBeReplaced.size() == 1);
     }
 
     @Test
-    void testFindAllCurrentPricesThatNeedToBeReplaced(){
+    void testFindAllCurrentPricesThatNeedToBeReplaced() {
         /*
         Test FindAllCurrentPricesThatNeedToBeReplaced selects correct mappings
         */
@@ -80,13 +81,14 @@ public class ProductPriceRepositoryTest extends AbstractBaseTest {
         setUpProductPrice(store, product2, "ron", 15.0, currentDate.plusDays(1), null);
 
         List<ProductPrice> mappingsThatNeedToBeReplaced =
-                productPriceRepository.findAllCurrentPricesThatNeedToBeReplaced(currentDate).get();
+                productPriceRepository.findAllCurrentPricesThatNeedToBeReplaced(
+                currentDate).get();
 
         assert (mappingsThatNeedToBeReplaced.getFirst().getStartDate().equals(currentDate.minusDays(1)));
     }
 
     @Test
-    void testFindOverlappingMappingsCount(){
+    void testFindOverlappingMappingsCount() {
         /*
         Test findOverlappingMappings selects correct mappings
         */
@@ -99,14 +101,15 @@ public class ProductPriceRepositoryTest extends AbstractBaseTest {
         setUpProductPrice(store, product2, "ron", 15.0, currentDate.plusDays(1), null);
 
 
-        List<ProductPrice> overlappingMappings =
-                productPriceRepository.findOverlappingMappings(product, store, currentDate).get();
+        List<ProductPrice> overlappingMappings = productPriceRepository.findOverlappingMappings(product,
+                store,
+                currentDate).get();
 
         assert (overlappingMappings.size() == 1);
     }
 
     @Test
-    void testFindOverlappingMappings(){
+    void testFindOverlappingMappings() {
         /*
         Test findOverlappingMappings selects correct mappings
         */
@@ -119,14 +122,15 @@ public class ProductPriceRepositoryTest extends AbstractBaseTest {
         setUpProductPrice(store, product2, "ron", 15.0, currentDate.plusDays(1), null);
 
 
-        List<ProductPrice> overlappingMappings =
-                productPriceRepository.findOverlappingMappings(product, store, currentDate).get();
+        List<ProductPrice> overlappingMappings = productPriceRepository.findOverlappingMappings(product,
+                store,
+                currentDate).get();
 
         assert (overlappingMappings.getFirst().getStartDate().equals(currentDate));
     }
 
     @Test
-    void testFindAllCurrentProductPricesIgnoresFinishedItems(){
+    void testFindAllCurrentProductPricesIgnoresFinishedItems() {
         LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
         Store store = setUpStoreEntity("lidl");
         Product product = setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
@@ -135,12 +139,12 @@ public class ProductPriceRepositoryTest extends AbstractBaseTest {
 
         List<ProductPrice> currentProductPrices = productPriceRepository.findAllCurrentProductPrices(currentDate).get();
 
-        assert(currentProductPrices.size() == 1);
-        assert(currentProductPrices.getFirst().getStartDate().equals(currentDate));
+        assert (currentProductPrices.size() == 1);
+        assert (currentProductPrices.getFirst().getStartDate().equals(currentDate));
     }
 
     @Test
-    void testFindAllCurrentProductPricesFutureFinishedItems(){
+    void testFindAllCurrentProductPricesFutureFinishedItems() {
         LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
         Store store = setUpStoreEntity("lidl");
         Product product = setUpProduct("P001", "lapte", "lactate", "zuzu", 1.0, "l");
@@ -149,12 +153,12 @@ public class ProductPriceRepositoryTest extends AbstractBaseTest {
 
         List<ProductPrice> currentProductPrices = productPriceRepository.findAllCurrentProductPrices(currentDate).get();
 
-        assert(currentProductPrices.size() == 1);
-        assert(currentProductPrices.getFirst().getStartDate().equals(currentDate));
+        assert (currentProductPrices.size() == 1);
+        assert (currentProductPrices.getFirst().getStartDate().equals(currentDate));
     }
 
     @Test
-    void testFindStoresHavingProductSuccess(){
+    void testFindStoresHavingProductSuccess() {
         LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
         Store store = setUpStoreEntity("lidl");
         Store store2 = setUpStoreEntity("kaufland");
@@ -170,7 +174,7 @@ public class ProductPriceRepositoryTest extends AbstractBaseTest {
     }
 
     @Test
-    void testFindStoresHavingProductIgnoreOutdatedMappings(){
+    void testFindStoresHavingProductIgnoreOutdatedMappings() {
         LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
         Store store = setUpStoreEntity("lidl");
         Store store2 = setUpStoreEntity("kaufland");
@@ -185,7 +189,7 @@ public class ProductPriceRepositoryTest extends AbstractBaseTest {
     }
 
     @Test
-    void testFindStoresHavingProductIgnoreFutureMappings(){
+    void testFindStoresHavingProductIgnoreFutureMappings() {
         LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
         Store store = setUpStoreEntity("lidl");
         Store store2 = setUpStoreEntity("kaufland");

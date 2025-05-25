@@ -1,8 +1,8 @@
 package com.price_comparator.price_comparator.Service.Impl;
 
 import com.price_comparator.price_comparator.Controller.CurrentDateController;
-import com.price_comparator.price_comparator.Enum.AllMeasureUnits;
 import com.price_comparator.price_comparator.DTO.FinalPrice;
+import com.price_comparator.price_comparator.Enum.AllMeasureUnits;
 import com.price_comparator.price_comparator.Model.ProductPrice;
 import com.price_comparator.price_comparator.Repository.ProductPriceRepository;
 import com.price_comparator.price_comparator.Service.BestPricePerUnitService;
@@ -31,13 +31,13 @@ public class BestPricePerUnitServiceImpl implements BestPricePerUnitService {
     @Override
     public List<FinalPrice> getBestProductsPerUnit(int size) {
         LocalDate currentDate = LocalDate.parse(currentDateController.getCurrentDate());
-        List<ProductPrice> productPriceList =
-                productPriceRepository.findAllCurrentProductPrices(currentDate).filter(list -> !list.isEmpty()).orElseThrow(() ->
-                new RuntimeException("No ProductPrices available for the moment, add some first"));
+        List<ProductPrice> productPriceList = productPriceRepository.findAllCurrentProductPrices(currentDate).filter(
+                list -> !list.isEmpty()).orElseThrow(() -> new RuntimeException(
+                "No ProductPrices available for the moment, add some first"));
 
         List<FinalPrice> bestProductsPerUnit = new ArrayList<>();
 
-        for (ProductPrice productPrice : productPriceList){
+        for (ProductPrice productPrice : productPriceList) {
             String productId = productPrice.getProduct().getProductId();
             String storeName = productPrice.getStore().getName();
 
@@ -55,18 +55,18 @@ public class BestPricePerUnitServiceImpl implements BestPricePerUnitService {
     public FinalPrice standardizePrice(FinalPrice price) {
         String unit = price.getPackageUnit();
 
-        if(BestPricePerUnitService.isStandardUnit(unit)){
-            Double pricePerUnit = price.getFinalPrice() / (Double) price.getPackageQuantity();
+        if (BestPricePerUnitService.isStandardUnit(unit)) {
+            Double pricePerUnit = price.getFinalPrice() / price.getPackageQuantity();
             price.setPricePerUnit(pricePerUnit);
 
             return price;
         }
 
-        if(AllMeasureUnits.fromValue(unit).equals(AllMeasureUnits.G) || AllMeasureUnits.fromValue(unit).equals(AllMeasureUnits.ML)){
+        if (AllMeasureUnits.fromValue(unit).equals(AllMeasureUnits.G) || AllMeasureUnits.fromValue(unit).equals(
+                AllMeasureUnits.ML)) {
             price.setPricePerUnit(price.getFinalPrice() * 1000.0 / price.getPackageQuantity());
-        }
-        else{
-            throw new IllegalArgumentException("Unit measure " + unit + " unknown"); 
+        } else {
+            throw new IllegalArgumentException("Unit measure " + unit + " unknown");
         }
 
         return price;

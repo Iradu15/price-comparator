@@ -13,9 +13,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Table(
         name = "discounts",
-        uniqueConstraints = @UniqueConstraint(columnNames = {
-                "product_id", "store_id", "percentage_of_discount", "from_date", "to_date"
-        })
+        uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "store_id",
+        "percentage_of_discount", "from_date", "to_date"})
 )
 @Getter
 public class Discount {
@@ -52,12 +51,17 @@ public class Discount {
 
     @Override
     public String toString() {
-        return "Discount{" +
-                "product=" + product +
-                ", store=" + store +
-                ", percentageOfDiscount=" + percentageOfDiscount +
-                ", fromDate=" + fromDate +
-                ", toDate=" + toDate +
-                '}';
+        return "Discount{"
+               + "product="
+               + product
+               + ", store="
+               + store
+               + ", percentageOfDiscount="
+               + percentageOfDiscount
+               + ", fromDate="
+               + fromDate
+               + ", toDate="
+               + toDate
+               + '}';
     }
 }

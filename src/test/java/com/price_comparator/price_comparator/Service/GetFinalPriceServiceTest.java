@@ -21,7 +21,7 @@ public class GetFinalPriceServiceTest extends AbstractBaseTest {
     GetFinalPriceService getFinalPriceService;
 
     @Test
-    void testGetFinalPriceForProductWithDiscount(){
+    void testGetFinalPriceForProductWithDiscount() {
         LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
         Store store = setUpStoreEntity("lidl");
         Product product = setUpProduct("P105", "suc", "bauturi", "prigat", 3.0, "l");
@@ -30,8 +30,7 @@ public class GetFinalPriceServiceTest extends AbstractBaseTest {
 
         FinalPrice result = getFinalPriceService.getFinalPriceForProduct(product.getProductId(), store.getName());
 
-        FinalPrice expectedResult = new FinalPrice(
-                product.getProductId(),
+        FinalPrice expectedResult = new FinalPrice(product.getProductId(),
                 product.getName(),
                 product.getBrand(),
                 product.getPackageQuantity(),
@@ -39,14 +38,13 @@ public class GetFinalPriceServiceTest extends AbstractBaseTest {
                 product.getCategory(),
                 store.getName(),
                 95.0,
-                -1.0
-        );
+                -1.0);
 
         assert (result.equals(expectedResult));
     }
 
     @Test
-    void testGetFinalPriceForProductNoDiscount(){
+    void testGetFinalPriceForProductNoDiscount() {
         LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
         Store store = setUpStoreEntity("lidl");
         Product product = setUpProduct("P105", "suc", "bauturi", "prigat", 3.0, "l");
@@ -54,8 +52,7 @@ public class GetFinalPriceServiceTest extends AbstractBaseTest {
 
         FinalPrice result = getFinalPriceService.getFinalPriceForProduct(product.getProductId(), store.getName());
 
-        FinalPrice expectedResult = new FinalPrice(
-                product.getProductId(),
+        FinalPrice expectedResult = new FinalPrice(product.getProductId(),
                 product.getName(),
                 product.getBrand(),
                 product.getPackageQuantity(),
@@ -63,14 +60,13 @@ public class GetFinalPriceServiceTest extends AbstractBaseTest {
                 product.getCategory(),
                 store.getName(),
                 100.0,
-                -1.0
-        );
+                -1.0);
 
         assert (result.equals(expectedResult));
     }
 
     @Test
-    void testGetFinalPriceForProductPastDiscount(){
+    void testGetFinalPriceForProductPastDiscount() {
         LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
         Store store = setUpStoreEntity("lidl");
         Product product = setUpProduct("P105", "suc", "bauturi", "prigat", 3.0, "l");
@@ -79,8 +75,7 @@ public class GetFinalPriceServiceTest extends AbstractBaseTest {
 
         FinalPrice result = getFinalPriceService.getFinalPriceForProduct(product.getProductId(), store.getName());
 
-        FinalPrice expectedResult = new FinalPrice(
-                product.getProductId(),
+        FinalPrice expectedResult = new FinalPrice(product.getProductId(),
                 product.getName(),
                 product.getBrand(),
                 product.getPackageQuantity(),
@@ -88,14 +83,13 @@ public class GetFinalPriceServiceTest extends AbstractBaseTest {
                 product.getCategory(),
                 store.getName(),
                 100.0,
-                -1.0
-        );
+                -1.0);
 
         assert (result.equals(expectedResult));
     }
 
     @Test
-    void testGetFinalPriceForProductFutureDiscount(){
+    void testGetFinalPriceForProductFutureDiscount() {
         LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
         Store store = setUpStoreEntity("lidl");
         Product product = setUpProduct("P105", "suc", "bauturi", "prigat", 3.0, "l");
@@ -104,8 +98,7 @@ public class GetFinalPriceServiceTest extends AbstractBaseTest {
 
         FinalPrice result = getFinalPriceService.getFinalPriceForProduct(product.getProductId(), store.getName());
 
-        FinalPrice expectedResult = new FinalPrice(
-                product.getProductId(),
+        FinalPrice expectedResult = new FinalPrice(product.getProductId(),
                 product.getName(),
                 product.getBrand(),
                 product.getPackageQuantity(),
@@ -113,14 +106,13 @@ public class GetFinalPriceServiceTest extends AbstractBaseTest {
                 product.getCategory(),
                 store.getName(),
                 100.0,
-                -1.0
-        );
+                -1.0);
 
         assert (result.equals(expectedResult));
     }
 
     @Test
-    void testGetFinalPriceForProductAllStores2StoresNoDiscount(){
+    void testGetFinalPriceForProductAllStores2StoresNoDiscount() {
         LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
         Store store = setUpStoreEntity("lidl");
         Store store2 = setUpStoreEntity("kaufland");
@@ -133,7 +125,7 @@ public class GetFinalPriceServiceTest extends AbstractBaseTest {
     }
 
     @Test
-    void testGetFinalPriceForProductOneStoreDiscount(){
+    void testGetFinalPriceForProductOneStoreDiscount() {
         LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
         Store store = setUpStoreEntity("lidl");
         Product product = setUpProduct("P105", "suc", "bauturi", "prigat", 3.0, "l");
@@ -145,7 +137,7 @@ public class GetFinalPriceServiceTest extends AbstractBaseTest {
     }
 
     @Test
-    void testGetFinalPriceForProductAllStores2StoresDiscount(){
+    void testGetFinalPriceForProductAllStores2StoresDiscount() {
         LocalDate currentDate = setUpCurrentDate(LocalDate.now()).getCurrentDay();
         Store store = setUpStoreEntity("lidl");
         Store store2 = setUpStoreEntity("kaufland");

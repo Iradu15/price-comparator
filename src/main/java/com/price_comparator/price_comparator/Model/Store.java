@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Table(name="stores")
+@Table(name = "stores")
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique=true)
+    @Column(unique = true)
     private String name;
 
     public Store(String name) {
@@ -24,8 +24,6 @@ public class Store {
 
     @Override
     public String toString() {
-        return "Store{" +
-                "name='" + name + '\'' +
-                '}';
+        return "Store{" + "name='" + name + '\'' + '}';
     }
 }
